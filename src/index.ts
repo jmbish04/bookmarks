@@ -30,7 +30,7 @@ app.get("/", async (c) => {
       ${(results.results ?? [])
         .map(
           (row) =>
-            `<li><a href="/article/${row.raindrop_id}">${row.title ?? row.url}</a> - ${row.summary ?? ""}</li>`
+            `<li><a href="/article/${row.raindrop_id}">${htmlEscape(row.title ?? row.url)}</a> - ${htmlEscape(row.summary ?? "")}</li>`
         )
         .join("")}
     </ul>
@@ -54,6 +54,13 @@ app.get("/search", async (c) => {
 
 const xmlEscape = (value: string): string =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const htmlEscape = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 
 app.get("/article/:id", async (c) => {
   const id = Number(c.req.param("id"));
@@ -66,11 +73,11 @@ app.get("/article/:id", async (c) => {
   }
 
   const html = await c.env.HTML_CACHE.get(`html:${id}`);
-  return c.html(`<!doctype html><html><head><title>${record.title ?? record.url}</title></head><body>
-    <h1>${record.title ?? record.url}</h1>
-    <p>${record.byline ?? ""}</p>
-    <article>${record.text_content ?? ""}</article>
-    <pre>${html ?? ""}</pre>
+  return c.html(`<!doctype html><html><head><title>${htmlEscape(record.title ?? record.url)}</title></head><body>
+    <h1>${htmlEscape(record.title ?? record.url)}</h1>
+    <p>${htmlEscape(record.byline ?? "")}</p>
+    <article>${htmlEscape(record.text_content ?? "")}</article>
+    <pre>${htmlEscape(html ?? "")}</pre>
   </body></html>`);
 });
 
