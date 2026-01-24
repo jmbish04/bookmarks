@@ -61,6 +61,23 @@ const htmlEscape = (value: string): string =>
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
+const sanitizeHtml = (value: string): string => {
+  const doc = new DOMParser().parseFromString(value, "text/html");
+  doc.querySelectorAll("script, iframe, object, embed").forEach((el) => el.remove());
+  doc.querySelectorAll("*").forEach((el) => {
+    Array.from(el.attributes).forEach((attr) => {
+      const name = attr.name.toLowerCase();
+      const attrValue = attr.value.trim().toLowerCase();
+      if (name.startsWith("on")) {
+        el.removeAttribute(attr.name);
+      }
+      if ((name === "href" || name === "src") && attrValue.startsWith("javascript:")) {
+        el.removeAttribute(attr.name);
+      }
+    });
+  });
+  return doc.body.innerHTML;
+};
 
 app.get("/article/:id", async (c) => {
   const id = Number(c.req.param("id"));
@@ -72,10 +89,13 @@ app.get("/article/:id", async (c) => {
     return c.notFound();
   }
 
+  const html = await c.env.HTML_CACHE.get(`html:${id}`);
+  const safeHtml = html ? sanitizeHtml(html) : "";
   return c.html(`<!doctype html><html><head><title>${htmlEscape(record.title ?? record.url)}</title></head><body>
     <h1>${htmlEscape(record.title ?? record.url)}</h1>
     <p>${htmlEscape(record.byline ?? "")}</p>
     <article>${htmlEscape(record.text_content ?? "")}</article>
+    <section>${safeHtml}</section>
   </body></html>`);
 });
 
