@@ -72,12 +72,10 @@ app.get("/article/:id", async (c) => {
     return c.notFound();
   }
 
-  const html = await c.env.HTML_CACHE.get(`html:${id}`);
   return c.html(`<!doctype html><html><head><title>${htmlEscape(record.title ?? record.url)}</title></head><body>
     <h1>${htmlEscape(record.title ?? record.url)}</h1>
     <p>${htmlEscape(record.byline ?? "")}</p>
     <article>${htmlEscape(record.text_content ?? "")}</article>
-    <pre>${htmlEscape(html ?? "")}</pre>
   </body></html>`);
 });
 

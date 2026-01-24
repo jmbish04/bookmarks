@@ -40,5 +40,5 @@ binding = "BROWSER"
 crons = ["*/30 * * * *"]
 
 [vars]
-APP_URL = "https://example.com"
-PODCAST_BASE_URL = "https://example.com"
+APP_URL = "https://replace-with-your-domain.com"
+PODCAST_BASE_URL = "https://replace-with-your-domain.com"
