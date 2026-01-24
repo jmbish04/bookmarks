@@ -24,7 +24,7 @@ function parseHtml(html: string, url: string): ExtractedContent | null {
 async function fetchHtml(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
-      "User-Agent": "CloudflareWorker"
+      "User-Agent": "BookmarkArchiver/1.0 (+https://example.com/about)"
     }
   });
 

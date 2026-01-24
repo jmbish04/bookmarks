@@ -4,6 +4,7 @@ import { handleQueue } from "./queue-consumer";
 import type { BookmarkRecord, BookmarkQueueMessage, Env } from "./types";
 
 const app = new Hono<{ Bindings: Env }>();
+const MAX_QUEUE_ITEMS = 10;
 
 async function getLastSync(env: Env): Promise<string | undefined> {
   const result = await env.DB.prepare("SELECT last_synced_at FROM sync_log ORDER BY id DESC LIMIT 1").first<{ last_synced_at: string }>();
@@ -83,7 +84,7 @@ app.get("/podcast.xml", async (c) => {
 
   const items = (episodes.results ?? [])
     .map((episode) => {
-      const audioUrl = `https://example.com/${episode.audio_key}`;
+      const audioUrl = `${c.env.PODCAST_BASE_URL.replace(/\/$/, "")}/${episode.audio_key}`;
       return `\n      <item>\n        <title><![CDATA[${episode.title}]]></title>\n        <link>${episode.url}</link>\n        <pubDate>${new Date(episode.created_at).toUTCString()}</pubDate>\n        <enclosure url="${audioUrl}" type="audio/mpeg" />\n      </item>`;
     })
     .join("");
@@ -91,7 +92,7 @@ app.get("/podcast.xml", async (c) => {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0"><channel>
       <title>Daily Podcast</title>
-      <link>https://example.com</link>
+      <link>${xmlEscape(c.env.APP_URL)}</link>
       <description>${xmlEscape("Bookmark Podcast Feed")}</description>${items}
     </channel></rss>`;
 
@@ -107,7 +108,7 @@ export default {
     const lastSync = await getLastSync(env);
     const items = await client.listBookmarks(lastSync);
 
-    const queueItems = items.slice(0, 10).map<BookmarkQueueMessage>((item) => ({
+    const queueItems = items.slice(0, MAX_QUEUE_ITEMS).map<BookmarkQueueMessage>((item) => ({
       raindropId: item._id,
       link: item.link,
       title: item.title,

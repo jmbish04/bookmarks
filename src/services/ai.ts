@@ -10,11 +10,19 @@ export async function generateSummary(ai: Ai, text: string): Promise<SummaryResu
     prompt: `Summarize the following article into JSON with keys summary and key_points (array):\n\n${text}`
   });
 
-  if (typeof response !== "string") {
-    return response as SummaryResult;
+  const parsed = typeof response === "string" ? JSON.parse(response) : response;
+  if (
+    typeof parsed === "object" &&
+    parsed !== null &&
+    "summary" in parsed &&
+    "key_points" in parsed &&
+    typeof (parsed as { summary: unknown }).summary === "string" &&
+    Array.isArray((parsed as { key_points: unknown }).key_points)
+  ) {
+    return parsed as SummaryResult;
   }
 
-  return JSON.parse(response) as SummaryResult;
+  throw new Error("Invalid summary response format");
 }
 
 export async function generatePodcastScript(ai: Ai, text: string): Promise<PodcastScriptResult> {
@@ -22,11 +30,12 @@ export async function generatePodcastScript(ai: Ai, text: string): Promise<Podca
     prompt: `Rewrite the article into a conversational podcast script. Return JSON with key script.\n\n${text}`
   });
 
-  if (typeof response !== "string") {
-    return response as PodcastScriptResult;
+  const parsed = typeof response === "string" ? JSON.parse(response) : response;
+  if (typeof parsed === "object" && parsed !== null && "script" in parsed && typeof (parsed as { script: unknown }).script === "string") {
+    return parsed as PodcastScriptResult;
   }
 
-  return JSON.parse(response) as PodcastScriptResult;
+  throw new Error("Invalid podcast script response format");
 }
 
 export async function generateEmbeddings(ai: Ai, chunks: string[]): Promise<number[][]> {

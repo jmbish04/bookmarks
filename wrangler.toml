@@ -5,11 +5,11 @@ compatibility_date = "2024-06-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "bookmarks"
-database_id = ""
+database_id = "REPLACE_WITH_D1_ID"
 
 [[kv_namespaces]]
 binding = "HTML_CACHE"
-id = ""
+id = "REPLACE_WITH_KV_ID"
 
 [[r2_buckets]]
 binding = "PODCAST_BUCKET"
@@ -36,3 +36,7 @@ binding = "BROWSER"
 
 [triggers]
 crons = ["*/30 * * * *"]
+
+[vars]
+APP_URL = "https://example.com"
+PODCAST_BASE_URL = "https://example.com"
