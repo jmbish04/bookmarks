@@ -51,6 +51,9 @@ app.get("/search", async (c) => {
   return c.json({ results: searchResults.matches });
 });
 
+const xmlEscape = (value: string): string =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 app.get("/article/:id", async (c) => {
   const id = Number(c.req.param("id"));
   const record = await c.env.DB.prepare("SELECT * FROM bookmarks WHERE raindrop_id = ?")
@@ -89,7 +92,7 @@ app.get("/podcast.xml", async (c) => {
     <rss version="2.0"><channel>
       <title>Daily Podcast</title>
       <link>https://example.com</link>
-      <description>Bookmark Podcast Feed</description>${items}
+      <description>${xmlEscape("Bookmark Podcast Feed")}</description>${items}
     </channel></rss>`;
 
   return c.text(rss, 200, {

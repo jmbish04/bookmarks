@@ -1,4 +1,5 @@
 import { Readability } from "@mozilla/readability";
+import puppeteer from "@cloudflare/puppeteer";
 import type { ExtractedContent } from "../types";
 
 const MIN_TEXT_LENGTH = 200;
@@ -34,26 +35,17 @@ async function fetchHtml(url: string): Promise<string> {
   return response.text();
 }
 
-async function renderWithBrowser(url: string, browser: Fetcher): Promise<string> {
-  const response = await browser.fetch("https://example.com", {
-    method: "POST",
-    body: JSON.stringify({
-      url,
-      waitUntil: "networkidle0"
-    })
-  });
+async function renderWithBrowser(url: string, browserBinding: Fetcher): Promise<string> {
+  const browser = await puppeteer.launch(browserBinding);
+  const page = await browser.newPage();
 
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Browser rendering failed: ${body}`);
+  try {
+    await page.goto(url, { waitUntil: "networkidle0" });
+    return await page.content();
+  } finally {
+    await page.close();
+    await browser.close();
   }
-
-  const data = (await response.json()) as { html?: string };
-  if (!data.html) {
-    throw new Error("Browser rendering returned empty HTML");
-  }
-
-  return data.html;
 }
 
 export async function extractContent(url: string, browser: Fetcher): Promise<ExtractedContent> {
