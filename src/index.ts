@@ -71,7 +71,10 @@ const sanitizeHtml = (value: string): string => {
       if (name.startsWith("on")) {
         el.removeAttribute(attr.name);
       }
-      if ((name === "href" || name === "src") && attrValue.startsWith("javascript:")) {
+      if (
+        (name === "href" || name === "src") &&
+        (attrValue.startsWith("javascript:") || attrValue.startsWith("data:") || attrValue.startsWith("vbscript:"))
+      ) {
         el.removeAttribute(attr.name);
       }
     });
