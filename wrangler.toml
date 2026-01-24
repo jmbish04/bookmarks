@@ -1,0 +1,38 @@
+name = "bookmarks"
+main = "src/index.ts"
+compatibility_date = "2024-06-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bookmarks"
+database_id = ""
+
+[[kv_namespaces]]
+binding = "HTML_CACHE"
+id = ""
+
+[[r2_buckets]]
+binding = "PODCAST_BUCKET"
+bucket_name = "podcast-audio"
+
+[[queues.producers]]
+binding = "BOOKMARK_QUEUE"
+queue = "bookmark-processing"
+
+[[queues.consumers]]
+queue = "bookmark-processing"
+max_batch_size = 10
+max_batch_timeout = 30
+
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "bookmark-vectors"
+
+[[browser]]
+binding = "BROWSER"
+
+[triggers]
+crons = ["*/30 * * * *"]
