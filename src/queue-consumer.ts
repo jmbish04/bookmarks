@@ -10,7 +10,7 @@ function chunkText(text: string, size = 1200, overlap = 200): string[] {
     chunks.push(text.slice(start, end));
     start = end - overlap;
     if (start <= 0 || start >= end) {
-      start = 0;
+      break;
     }
   }
   return chunks;
