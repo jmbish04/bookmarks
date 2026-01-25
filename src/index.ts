@@ -9,6 +9,9 @@ import type { BookmarkQueueMessage, Env } from "./types";
 const app = new Hono<{ Bindings: Env }>();
 const MAX_QUEUE_ITEMS = 10;
 
+app.get("/", (c) => c.env.ASSETS.fetch(c.req.raw));
+app.get("/assets/*", (c) => c.env.ASSETS.fetch(c.req.raw));
+
 /**
  * Get the most recent sync timestamp from the sync_log table.
  */
@@ -25,41 +28,6 @@ async function setLastSync(env: Env, timestamp: string): Promise<void> {
   const db = getDb(env);
   await db.insert(syncLog).values({ lastSyncedAt: timestamp });
 }
-
-/**
- * Render a dashboard of recent bookmarks with a search form.
- */
-app.get("/", async (c) => {
-  const db = getDb(c.env);
-  const results = await db
-    .select({
-      id: bookmarks.id,
-      raindropId: bookmarks.raindropId,
-      title: bookmarks.title,
-      url: bookmarks.url,
-      summary: bookmarks.summary,
-      createdAt: bookmarks.createdAt
-    })
-    .from(bookmarks)
-    .orderBy(desc(bookmarks.createdAt))
-    .limit(20);
-
-  return c.html(`<!doctype html><html><head><title>Bookmarks</title></head><body>
-    <h1>Recent Bookmarks</h1>
-    <form action="/search">
-      <input type="text" name="q" placeholder="Search" />
-      <button type="submit">Search</button>
-    </form>
-    <ul>
-      ${results
-        .map(
-          (row) =>
-            `<li><a href="/article/${row.raindropId}">${htmlEscape(row.title ?? row.url)}</a> - ${htmlEscape(row.summary ?? "")}</li>`
-        )
-        .join("")}
-    </ul>
-  </body></html>`);
-});
 
 /**
  * Perform vector search using an embedded query.

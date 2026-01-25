@@ -10,6 +10,7 @@ export interface Env {
   APP_URL: string;
   PODCAST_BASE_URL: string;
   DATABASE_URL?: string;
+  ASSETS: Fetcher;
 }
 
 export interface SyncLog {

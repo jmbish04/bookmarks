@@ -5,11 +5,11 @@ This project runs on Cloudflare Workers to sync Raindrop.io bookmarks, archive r
 ## Key Components
 - **Cron Ingestion:** Polls Raindrop.io every 30 minutes and pushes new bookmarks to a Cloudflare Queue.
 - **Queue Consumer:** Uses Browser Rendering + Readability to extract article content, stores HTML in KV, metadata in D1, vectors in Vectorize, and audio in R2.
-- **Frontend:** Hono routes for a dashboard (`/`), reader view (`/article/:id`), search (`/search`), and RSS feed (`/podcast.xml`).
+- **Frontend:** React + Vite (Shadcn dark theme) served from the `frontend/` folder and built into Worker assets.
 
 ## Setup
 1. Configure bindings in `wrangler.jsonc` (D1, KV, R2, Queue, Vectorize, Browser, AI). Set `migrations_dir` to `./migrations` for Drizzle-generated D1 migrations.
-2. Create the D1 schema using `schema.sql`.
+2. Create the D1 schema using `schema.sql` or `pnpm run drizzle:generate`.
 3. Set the `RAINDROP_TOKEN` secret in your Worker environment.
 4. Copy `.dev.vars.example` to `.dev.vars`, update values, then run `wrangler secret bulk .dev.vars` and `wrangler types`.
 
@@ -17,3 +17,5 @@ This project runs on Cloudflare Workers to sync Raindrop.io bookmarks, archive r
 - `npm run lint` runs the TypeScript type-checker.
 - `pnpm run drizzle:generate` generates migrations in `./migrations`.
 - `pnpm run drizzle:migrate:remote` applies migrations to the remote D1 database.
+- `pnpm --filter frontend dev` runs the frontend dev server.
+- `pnpm --filter frontend build` builds the frontend to `dist/` for Worker assets.
