@@ -10,7 +10,6 @@
     "drizzle:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:build": "vite build",
-    "migrate:remote": "wrangler d1 migrations apply DB --remote",
     "build": "tsc -p frontend/tsconfig.json && vite build"
   },
   "dependencies": {
