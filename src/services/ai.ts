@@ -1,12 +1,15 @@
-import type { PodcastScriptResult, SummaryResult, VectorChunk } from "../types";
+import type { Env, PodcastScriptResult, SummaryResult, VectorChunk } from "../types";
 
 const SUMMARY_MODEL = "@cf/meta/llama-3-8b-instruct";
 const SCRIPT_MODEL = "@cf/meta/llama-3-8b-instruct";
 const EMBEDDING_MODEL = "@cf/baai/bge-base-en-v1.5";
 const TTS_MODEL = "@cf/deepgram/aura-1";
 
-export async function generateSummary(ai: Ai, text: string): Promise<SummaryResult> {
-  const response = await ai.run(SUMMARY_MODEL, {
+/**
+ * Generate a structured summary JSON response for the provided text.
+ */
+export async function generateSummary(env: Env, text: string): Promise<SummaryResult> {
+  const response = await env.AI.run(SUMMARY_MODEL, {
     prompt: `Summarize the following article into JSON with keys summary and key_points (array):\n\n${text}`
   });
 
@@ -25,8 +28,11 @@ export async function generateSummary(ai: Ai, text: string): Promise<SummaryResu
   throw new Error("Invalid summary response format");
 }
 
-export async function generatePodcastScript(ai: Ai, text: string): Promise<PodcastScriptResult> {
-  const response = await ai.run(SCRIPT_MODEL, {
+/**
+ * Generate a conversational podcast script for the article text.
+ */
+export async function generatePodcastScript(env: Env, text: string): Promise<PodcastScriptResult> {
+  const response = await env.AI.run(SCRIPT_MODEL, {
     prompt: `Rewrite the article into a conversational podcast script. Return JSON with key script.\n\n${text}`
   });
 
@@ -38,20 +44,29 @@ export async function generatePodcastScript(ai: Ai, text: string): Promise<Podca
   throw new Error("Invalid podcast script response format");
 }
 
-export async function generateEmbeddings(ai: Ai, chunks: string[]): Promise<number[][]> {
-  const response = await ai.run(EMBEDDING_MODEL, { text: chunks });
+/**
+ * Generate embeddings for each chunk of text with Workers AI.
+ */
+export async function generateEmbeddings(env: Env, chunks: string[]): Promise<number[][]> {
+  const response = await env.AI.run(EMBEDDING_MODEL, { text: chunks });
   if (Array.isArray(response)) {
     return response as number[][];
   }
   return (response as { data: number[][] }).data;
 }
 
-export async function upsertVectors(index: VectorizeIndex, vectors: VectorChunk[]): Promise<void> {
-  await index.upsert(vectors);
+/**
+ * Upsert vector embeddings into the Vectorize index.
+ */
+export async function upsertVectors(env: Env, vectors: VectorChunk[]): Promise<void> {
+  await env.VECTORIZE.upsert(vectors);
 }
 
-export async function synthesizeAudio(ai: Ai, script: string): Promise<ArrayBuffer> {
-  const response: unknown = await ai.run(TTS_MODEL, {
+/**
+ * Synthesize an MP3 audio buffer from a podcast script.
+ */
+export async function synthesizeAudio(env: Env, script: string): Promise<ArrayBuffer> {
+  const response: unknown = await env.AI.run(TTS_MODEL, {
     text: script,
     format: "mp3"
   });

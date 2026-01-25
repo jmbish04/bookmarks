@@ -1,7 +1,13 @@
+import { eq } from "drizzle-orm";
 import { extractContent } from "./services/crawler";
 import { generateEmbeddings, generatePodcastScript, generateSummary, synthesizeAudio, upsertVectors } from "./services/ai";
+import { getDb } from "./db/client";
+import { bookmarks, contentCache, podcastEpisodes } from "./db/schema";
 import type { BookmarkQueueMessage, Env, VectorChunk } from "./types";
 
+/**
+ * Chunk a long string with overlap for embedding generation.
+ */
 function chunkText(text: string, size = 1200, overlap = 200): string[] {
   const chunks: string[] = [];
   let start = 0;
@@ -17,49 +23,58 @@ function chunkText(text: string, size = 1200, overlap = 200): string[] {
   return chunks;
 }
 
+/**
+ * Process queued bookmark messages for extraction, AI processing, and storage.
+ */
 export async function handleQueue(batch: MessageBatch<BookmarkQueueMessage>, env: Env): Promise<void> {
   for (const message of batch.messages) {
     const { raindropId, link, title, created } = message.body;
     try {
+      const db = getDb(env);
       const content = await extractContent(link, env.BROWSER);
       const kvKey = `html:${raindropId}`;
       await env.HTML_CACHE.put(kvKey, content.html);
 
-      await env.DB.prepare(
-        `INSERT INTO bookmarks (raindrop_id, title, url, byline, text_content, created_at)
-         VALUES (?, ?, ?, ?, ?, ?)
-         ON CONFLICT(raindrop_id) DO UPDATE SET
-           title = excluded.title,
-           url = excluded.url,
-           byline = excluded.byline,
-           text_content = excluded.text_content,
-           updated_at = datetime('now')`
-      )
-        .bind(raindropId, content.title ?? title ?? null, link, content.byline, content.textContent, created)
-        .run();
+      await db
+        .insert(bookmarks)
+        .values({
+          raindropId,
+          title: content.title ?? title ?? null,
+          url: link,
+          byline: content.byline,
+          textContent: content.textContent,
+          createdAt: created
+        })
+        .onConflictDoUpdate({
+          target: bookmarks.raindropId,
+          set: {
+            title: content.title ?? title ?? null,
+            url: link,
+            byline: content.byline,
+            textContent: content.textContent
+          }
+        });
 
-      await env.DB.prepare(
-        `INSERT INTO content_cache (raindrop_id, html_kv_key, error)
-         VALUES (?, ?, NULL)
-         ON CONFLICT(raindrop_id) DO UPDATE SET
-           html_kv_key = excluded.html_kv_key,
-           error = NULL,
-           extracted_at = datetime('now')`
-      )
-        .bind(raindropId, kvKey)
-        .run();
+      await db
+        .insert(contentCache)
+        .values({
+          raindropId,
+          htmlKvKey: kvKey,
+          error: null
+        })
+        .onConflictDoUpdate({
+          target: contentCache.raindropId,
+          set: {
+            htmlKvKey: kvKey,
+            error: null
+          }
+        });
 
-      const summary = await generateSummary(env.AI, content.textContent);
-      await env.DB.prepare(
-        `UPDATE bookmarks
-         SET summary = ?, updated_at = datetime('now')
-         WHERE raindrop_id = ?`
-      )
-        .bind(summary.summary, raindropId)
-        .run();
+      const summary = await generateSummary(env, content.textContent);
+      await db.update(bookmarks).set({ summary: summary.summary }).where(eq(bookmarks.raindropId, raindropId));
 
       const chunks = chunkText(content.textContent);
-      const embeddings = await generateEmbeddings(env.AI, chunks);
+      const embeddings = await generateEmbeddings(env, chunks);
       const vectors: VectorChunk[] = embeddings.map((values, index) => ({
         id: `${raindropId}:${index}`,
         values,
@@ -68,39 +83,48 @@ export async function handleQueue(batch: MessageBatch<BookmarkQueueMessage>, env
           chunk: index
         }
       }));
-      await upsertVectors(env.VECTORIZE, vectors);
+      await upsertVectors(env, vectors);
 
-      const scriptResult = await generatePodcastScript(env.AI, content.textContent);
-      const audioBuffer = await synthesizeAudio(env.AI, scriptResult.script);
+      const scriptResult = await generatePodcastScript(env, content.textContent);
+      const audioBuffer = await synthesizeAudio(env, scriptResult.script);
       const audioKey = `podcast/${raindropId}.mp3`;
       await env.PODCAST_BUCKET.put(audioKey, audioBuffer, {
         httpMetadata: {
           contentType: "audio/mpeg"
         }
       });
-      await env.DB.prepare(
-        `INSERT INTO podcast_episodes (raindrop_id, audio_key, script)
-         VALUES (?, ?, ?)
-         ON CONFLICT(raindrop_id) DO UPDATE SET
-           audio_key = excluded.audio_key,
-           script = excluded.script,
-           created_at = datetime('now')`
-      )
-        .bind(raindropId, audioKey, scriptResult.script)
-        .run();
+      await db
+        .insert(podcastEpisodes)
+        .values({
+          raindropId,
+          audioKey,
+          script: scriptResult.script
+        })
+        .onConflictDoUpdate({
+          target: podcastEpisodes.raindropId,
+          set: {
+            audioKey,
+            script: scriptResult.script
+          }
+        });
 
       message.ack();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error";
-      await env.DB.prepare(
-        `INSERT INTO content_cache (raindrop_id, html_kv_key, error)
-         VALUES (?, ?, ?)
-         ON CONFLICT(raindrop_id) DO UPDATE SET
-           error = excluded.error,
-           extracted_at = datetime('now')`
-      )
-        .bind(raindropId, `html:${raindropId}`, errorMessage)
-        .run();
+      const db = getDb(env);
+      await db
+        .insert(contentCache)
+        .values({
+          raindropId,
+          htmlKvKey: `html:${raindropId}`,
+          error: errorMessage
+        })
+        .onConflictDoUpdate({
+          target: contentCache.raindropId,
+          set: {
+            error: errorMessage
+          }
+        });
       message.retry();
     }
   }

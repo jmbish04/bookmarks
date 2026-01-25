@@ -8,6 +8,9 @@ export interface RaindropClientOptions {
   fetcher?: typeof fetch;
 }
 
+/**
+ * Raindrop API client with rate-limit handling and pagination.
+ */
 export class RaindropClient {
   private readonly token: string;
   private readonly fetcher: typeof fetch;
@@ -17,6 +20,9 @@ export class RaindropClient {
     this.fetcher = options.fetcher ?? fetch;
   }
 
+  /**
+   * List bookmarks optionally filtered by creation timestamp.
+   */
   async listBookmarks(sinceIso?: string, page = 0): Promise<RaindropItem[]> {
     const items: RaindropItem[] = [];
     let currentPage = page;
@@ -38,6 +44,9 @@ export class RaindropClient {
     return items;
   }
 
+  /**
+   * Fetch from the Raindrop API and honor rate-limit reset headers.
+   */
   private async fetchWithRateLimit(path: string, sinceIso?: string): Promise<Response> {
     const url = new URL(`${BASE_URL}${path}`);
     if (sinceIso) {

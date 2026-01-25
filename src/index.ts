@@ -1,4 +1,7 @@
 import { Hono } from "hono";
+import { desc } from "drizzle-orm";
+import { getDb } from "./db/client";
+import { syncLog } from "./db/schema";
 import { RaindropClient } from "./services/raindrop";
 import { handleQueue } from "./queue-consumer";
 import type { BookmarkRecord, BookmarkQueueMessage, Env } from "./types";
@@ -6,15 +9,26 @@ import type { BookmarkRecord, BookmarkQueueMessage, Env } from "./types";
 const app = new Hono<{ Bindings: Env }>();
 const MAX_QUEUE_ITEMS = 10;
 
+/**
+ * Get the most recent sync timestamp from the sync_log table.
+ */
 async function getLastSync(env: Env): Promise<string | undefined> {
-  const result = await env.DB.prepare("SELECT last_synced_at FROM sync_log ORDER BY id DESC LIMIT 1").first<{ last_synced_at: string }>();
-  return result?.last_synced_at;
+  const db = getDb(env);
+  const result = await db.select().from(syncLog).orderBy(desc(syncLog.id)).limit(1);
+  return result[0]?.lastSyncedAt;
 }
 
+/**
+ * Persist a sync timestamp for subsequent ingestion runs.
+ */
 async function setLastSync(env: Env, timestamp: string): Promise<void> {
-  await env.DB.prepare("INSERT INTO sync_log (last_synced_at) VALUES (?)").bind(timestamp).run();
+  const db = getDb(env);
+  await db.insert(syncLog).values({ lastSyncedAt: timestamp });
 }
 
+/**
+ * Render a dashboard of recent bookmarks with a search form.
+ */
 app.get("/", async (c) => {
   const results = await c.env.DB.prepare(
     "SELECT id, raindrop_id, title, url, summary, created_at FROM bookmarks ORDER BY created_at DESC LIMIT 20"
@@ -37,6 +51,9 @@ app.get("/", async (c) => {
   </body></html>`);
 });
 
+/**
+ * Perform vector search using an embedded query.
+ */
 app.get("/search", async (c) => {
   const query = c.req.query("q");
   if (!query) {
@@ -52,8 +69,14 @@ app.get("/search", async (c) => {
   return c.json({ results: searchResults.matches });
 });
 
+/**
+ * Escape values for XML output.
+ */
 const xmlEscape = (value: string): string =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+/**
+ * Escape values for HTML output.
+ */
 const htmlEscape = (value: string): string =>
   value
     .replace(/&/g, "&amp;")
@@ -61,6 +84,9 @@ const htmlEscape = (value: string): string =>
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
+/**
+ * Sanitize cached HTML by removing scriptable elements and unsafe attributes.
+ */
 const sanitizeHtml = (value: string): string => {
   const doc = new DOMParser().parseFromString(value, "text/html");
   doc.querySelectorAll("script, iframe, object, embed").forEach((el) => el.remove());
@@ -82,6 +108,9 @@ const sanitizeHtml = (value: string): string => {
   return doc.body.innerHTML;
 };
 
+/**
+ * Render the reader view for a single bookmark.
+ */
 app.get("/article/:id", async (c) => {
   const id = Number(c.req.param("id"));
   const record = await c.env.DB.prepare("SELECT * FROM bookmarks WHERE raindrop_id = ?")
@@ -102,6 +131,9 @@ app.get("/article/:id", async (c) => {
   </body></html>`);
 });
 
+/**
+ * Generate an RSS feed of recent podcast episodes.
+ */
 app.get("/podcast.xml", async (c) => {
   const episodes = await c.env.DB.prepare(
     `SELECT b.title, b.url, b.created_at, p.audio_key
@@ -129,6 +161,9 @@ app.get("/podcast.xml", async (c) => {
   });
 });
 
+/**
+ * Cloudflare Worker entrypoints for HTTP, scheduled, and queue triggers.
+ */
 export default {
   fetch: app.fetch,
   scheduled: async (_controller: ScheduledController, env: Env) => {

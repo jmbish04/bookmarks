@@ -4,6 +4,9 @@ import type { ExtractedContent } from "../types";
 
 const MIN_TEXT_LENGTH = 200;
 
+/**
+ * Parse HTML into readable article content using Readability.
+ */
 function parseHtml(html: string, url: string): ExtractedContent | null {
   const doc = new DOMParser().parseFromString(html, "text/html");
   const reader = new Readability(doc);
@@ -21,6 +24,9 @@ function parseHtml(html: string, url: string): ExtractedContent | null {
   };
 }
 
+/**
+ * Fetch HTML directly for lightweight extraction attempts.
+ */
 async function fetchHtml(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
@@ -35,6 +41,9 @@ async function fetchHtml(url: string): Promise<string> {
   return response.text();
 }
 
+/**
+ * Render HTML via Browser Rendering when lightweight fetch fails.
+ */
 async function renderWithBrowser(url: string, browserBinding: Fetcher): Promise<string> {
   const browser = await puppeteer.launch(browserBinding);
   const page = await browser.newPage();
@@ -48,6 +57,9 @@ async function renderWithBrowser(url: string, browserBinding: Fetcher): Promise<
   }
 }
 
+/**
+ * Hybrid extraction: attempt fetch + Readability, then fall back to browser rendering.
+ */
 export async function extractContent(url: string, browser: Fetcher): Promise<ExtractedContent> {
   let html = "";
   try {

@@ -9,6 +9,7 @@ export interface Env {
   RAINDROP_TOKEN: string;
   APP_URL: string;
   PODCAST_BASE_URL: string;
+  DATABASE_URL?: string;
 }
 
 export interface SyncLog {
