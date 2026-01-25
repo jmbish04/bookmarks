@@ -15,7 +15,7 @@ function chunkText(text: string, size = 1200, overlap = 200): string[] {
     const end = Math.min(text.length, start + size);
     chunks.push(text.slice(start, end));
     const nextStart = Math.max(end - overlap, 0);
-    if (nextStart <= start || nextStart >= end) {
+    if (nextStart <= start || nextStart >= text.length) {
       break;
     }
     start = nextStart;

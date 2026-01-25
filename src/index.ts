@@ -161,7 +161,8 @@ app.get("/podcast.xml", async (c) => {
   const items = episodes
     .map((episode) => {
       const audioUrl = `${c.env.PODCAST_BASE_URL.replace(/\/$/, "")}/${episode.audioKey}`;
-      return `\n      <item>\n        <title><![CDATA[${episode.title}]]></title>\n        <link>${episode.url}</link>\n        <pubDate>${new Date(episode.createdAt ?? "").toUTCString()}</pubDate>\n        <enclosure url="${audioUrl}" type="audio/mpeg" />\n      </item>`;
+      const pubDate = episode.createdAt ? new Date(episode.createdAt).toUTCString() : new Date().toUTCString();
+      return `\n      <item>\n        <title><![CDATA[${episode.title}]]></title>\n        <link>${episode.url}</link>\n        <pubDate>${pubDate}</pubDate>\n        <enclosure url="${audioUrl}" type="audio/mpeg" />\n      </item>`;
     })
     .join("");
 

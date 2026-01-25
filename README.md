@@ -8,7 +8,7 @@ This project runs on Cloudflare Workers to sync Raindrop.io bookmarks, archive r
 - **Frontend:** Hono routes for a dashboard (`/`), reader view (`/article/:id`), search (`/search`), and RSS feed (`/podcast.xml`).
 
 ## Setup
-1. Configure bindings in `wrangler.jsonc` (D1, KV, R2, Queue, Vectorize, Browser, AI).
+1. Configure bindings in `wrangler.jsonc` (D1, KV, R2, Queue, Vectorize, Browser, AI). Set `migrations_dir` to `./migrations` for Drizzle-generated D1 migrations.
 2. Create the D1 schema using `schema.sql`.
 3. Set the `RAINDROP_TOKEN` secret in your Worker environment.
 4. Copy `.dev.vars.example` to `.dev.vars`, update values, then run `wrangler secret bulk .dev.vars` and `wrangler types`.
