@@ -19,3 +19,4 @@ This project runs on Cloudflare Workers to sync Raindrop.io bookmarks, archive r
 - `pnpm run drizzle:migrate:remote` applies migrations to the remote D1 database.
 - `pnpm --filter frontend dev` runs the frontend dev server.
 - `pnpm --filter frontend build` builds the frontend to `dist/` for Worker assets.
+- `pnpm run migrate:remote` applies migrations to remote D1.
