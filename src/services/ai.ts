@@ -20,10 +20,16 @@ const parseJsonResponse = <T>(response: unknown): T => {
   return response as T;
 };
 
-const isSummaryResult = (value: SummaryResult): boolean =>
-  typeof value.summary === "string" && Array.isArray(value.key_points);
+const isSummaryResult = (value: unknown): value is SummaryResult =>
+  typeof value === "object" &&
+  value !== null &&
+  "summary" in value &&
+  "key_points" in value &&
+  typeof (value as { summary: unknown }).summary === "string" &&
+  Array.isArray((value as { key_points: unknown }).key_points);
 
-const isPodcastScriptResult = (value: PodcastScriptResult): boolean => typeof value.script === "string";
+const isPodcastScriptResult = (value: unknown): value is PodcastScriptResult =>
+  typeof value === "object" && value !== null && "script" in value && typeof (value as { script: unknown }).script === "string";
 
 /**
  * Generate a structured summary JSON response for the provided text.
