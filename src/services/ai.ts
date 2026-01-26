@@ -63,10 +63,10 @@ export async function generateSummary(env: Env, text: string): Promise<SummaryRe
     }
   } catch (error) {
     console.error("Failed to parse summary response", error, response);
-    throw new Error("Invalid summary response format from AI");
+    throw new Error("Summary response parsing failed");
   }
 
-  throw new Error("Invalid summary response format");
+  throw new Error("Summary response validation failed");
 }
 
 /**
@@ -100,10 +100,10 @@ export async function generatePodcastScript(env: Env, text: string): Promise<Pod
     }
   } catch (error) {
     console.error("Failed to parse podcast script response", error, response);
-    throw new Error("Invalid podcast script response format from AI");
+    throw new Error("Podcast script response parsing failed");
   }
 
-  throw new Error("Invalid podcast script response format");
+  throw new Error("Podcast script response validation failed");
 }
 
 /**

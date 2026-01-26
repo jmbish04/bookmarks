@@ -3,14 +3,12 @@ import type { Env } from "../types";
 const API_BASE = "https://api.cloudflare.com/client/v4/accounts";
 
 interface BrowserRenderResult {
-  html?: string;
+  html: string;
   [key: string]: unknown;
 }
 
 const isBrowserRenderResult = (value: unknown): value is BrowserRenderResult =>
-  typeof value === "object" &&
-  value !== null &&
-  (!("html" in value) || typeof (value as { html: unknown }).html === "string");
+  typeof value === "object" && value !== null && "html" in value && typeof (value as { html: unknown }).html === "string";
 
 /**
  * Invoke the Cloudflare Browser Rendering REST API for JSON output.

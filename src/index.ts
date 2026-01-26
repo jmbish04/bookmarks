@@ -77,16 +77,17 @@ const sanitizeHtml = (value: string): string => {
   doc.querySelectorAll("script, iframe, object, embed").forEach((el: Element) => el.remove());
   doc.querySelectorAll("*").forEach((el: Element) => {
     Array.from(el.attributes).forEach((attr) => {
-      const name = attr.name.toLowerCase();
-      const attrValue = attr.value.trim().toLowerCase();
+      const attribute = attr as Attr;
+      const name = attribute.name.toLowerCase();
+      const attrValue = attribute.value.trim().toLowerCase();
       if (name.startsWith("on")) {
-        el.removeAttribute(attr.name);
+        el.removeAttribute(attribute.name);
       }
       if (
         (name === "href" || name === "src") &&
         (attrValue.startsWith("javascript:") || attrValue.startsWith("data:") || attrValue.startsWith("vbscript:"))
       ) {
-        el.removeAttribute(attr.name);
+        el.removeAttribute(attribute.name);
       }
     });
   });
