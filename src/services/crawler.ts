@@ -18,7 +18,7 @@ function parseHtml(html: string, url: string): ExtractedContent | null {
   }
 
   return {
-    title: article.title ?? (typeof doc.title === "string" ? doc.title : url),
+    title: article.title ?? (doc.title as unknown as string) ?? url,
     byline: article.byline ?? null,
     textContent: article.textContent ?? "",
     html

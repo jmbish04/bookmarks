@@ -131,6 +131,7 @@ export async function handleQueue(batch: MessageBatch<BookmarkQueueMessage>, env
       if (message.attempts < MAX_QUEUE_ATTEMPTS) {
         message.retry();
       } else {
+        console.warn(`Dropping message for raindrop ${raindropId} after ${message.attempts} attempts`);
         message.ack();
       }
     }
