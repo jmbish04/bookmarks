@@ -5,8 +5,7 @@ CREATE TABLE IF NOT EXISTS sync_log (
 );
 
 CREATE TABLE IF NOT EXISTS bookmarks (
-  id INTEGER PRIMARY KEY,
-  raindrop_id INTEGER UNIQUE NOT NULL,
+  raindrop_id INTEGER PRIMARY KEY,
   title TEXT,
   url TEXT NOT NULL,
   byline TEXT,

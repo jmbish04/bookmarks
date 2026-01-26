@@ -5,12 +5,13 @@ export interface Env {
   BOOKMARK_QUEUE: Queue<BookmarkQueueMessage>;
   AI: Ai;
   VECTORIZE: VectorizeIndex;
-  BROWSER: Fetcher;
   RAINDROP_TOKEN: string;
   APP_URL: string;
   PODCAST_BASE_URL: string;
   DATABASE_URL?: string;
   ASSETS: Fetcher;
+  CLOUDFLARE_ACCOUNT_ID: string;
+  CLOUDFLARE_BROWSER_RENDER_TOKEN: string;
 }
 
 export interface SyncLog {

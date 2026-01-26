@@ -8,8 +8,7 @@ export const syncLog = sqliteTable("sync_log", {
 });
 
 export const bookmarks = sqliteTable("bookmarks", {
-  id: integer("id").primaryKey(),
-  raindropId: integer("raindrop_id").notNull().unique(),
+  raindropId: integer("raindrop_id").primaryKey(),
   title: text("title"),
   url: text("url").notNull(),
   byline: text("byline"),

@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { desc, eq } from "drizzle-orm";
+import { DOMParser } from "linkedom";
 import { getDb } from "./db/client";
 import { bookmarks, podcastEpisodes, syncLog } from "./db/schema";
 import { RaindropClient } from "./services/raindrop";
@@ -41,9 +42,13 @@ app.get("/search", async (c) => {
   const embeddingResponse = await c.env.AI.run("@cf/baai/bge-base-en-v1.5", { text: query });
   const queryVector = Array.isArray(embeddingResponse)
     ? embeddingResponse[0]
-    : (embeddingResponse && typeof embeddingResponse === 'object' && 'data' in embeddingResponse && Array.isArray(embeddingResponse.data) && embeddingResponse.data[0])
+    : embeddingResponse && typeof embeddingResponse === "object" && "data" in embeddingResponse && Array.isArray(embeddingResponse.data)
       ? embeddingResponse.data[0]
-      : []; // Or throw an error if an unexpected format is critical
+      : undefined;
+
+  if (!queryVector) {
+    return c.json({ error: "Failed to generate query vector" }, 500);
+  }
 
   const searchResults = await c.env.VECTORIZE.query(queryVector, { topK: 5 });
   return c.json({ results: searchResults.matches });
@@ -69,19 +74,20 @@ const htmlEscape = (value: string): string =>
  */
 const sanitizeHtml = (value: string): string => {
   const doc = new DOMParser().parseFromString(value, "text/html");
-  doc.querySelectorAll("script, iframe, object, embed").forEach((el) => el.remove());
-  doc.querySelectorAll("*").forEach((el) => {
+  doc.querySelectorAll("script, iframe, object, embed").forEach((el: Element) => el.remove());
+  doc.querySelectorAll("*").forEach((el: Element) => {
     Array.from(el.attributes).forEach((attr) => {
-      const name = attr.name.toLowerCase();
-      const attrValue = attr.value.trim().toLowerCase();
+      const attribute = attr as Attr;
+      const name = attribute.name.toLowerCase();
+      const attrValue = attribute.value.trim().toLowerCase();
       if (name.startsWith("on")) {
-        el.removeAttribute(attr.name);
+        el.removeAttribute(attribute.name);
       }
       if (
         (name === "href" || name === "src") &&
         (attrValue.startsWith("javascript:") || attrValue.startsWith("data:") || attrValue.startsWith("vbscript:"))
       ) {
-        el.removeAttribute(attr.name);
+        el.removeAttribute(attribute.name);
       }
     });
   });

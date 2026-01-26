@@ -1,6 +1,7 @@
 import { Readability } from "@mozilla/readability";
-import puppeteer from "@cloudflare/puppeteer";
-import type { ExtractedContent } from "../types";
+import { DOMParser } from "linkedom";
+import type { ExtractedContent, Env } from "../types";
+import { renderJson } from "./browser-rendering";
 
 const MIN_TEXT_LENGTH = 200;
 
@@ -9,7 +10,7 @@ const MIN_TEXT_LENGTH = 200;
  */
 function parseHtml(html: string, url: string): ExtractedContent | null {
   const doc = new DOMParser().parseFromString(html, "text/html");
-  const reader = new Readability(doc);
+  const reader = new Readability(doc as unknown as Document);
   const article = reader.parse();
 
   if (!article || !article.textContent || article.textContent.trim().length < MIN_TEXT_LENGTH) {
@@ -17,7 +18,7 @@ function parseHtml(html: string, url: string): ExtractedContent | null {
   }
 
   return {
-    title: article.title ?? doc.title ?? url,
+    title: article.title ?? (typeof doc.title === "string" ? doc.title : url),
     byline: article.byline ?? null,
     textContent: article.textContent ?? "",
     html
@@ -42,25 +43,20 @@ async function fetchHtml(url: string): Promise<string> {
 }
 
 /**
- * Render HTML via Browser Rendering when lightweight fetch fails.
+ * Render HTML via Browser Rendering REST API when lightweight fetch fails.
  */
-async function renderWithBrowser(url: string, browserBinding: Fetcher): Promise<string> {
-  const browser = await puppeteer.launch(browserBinding);
-  const page = await browser.newPage();
-
-  try {
-    await page.goto(url, { waitUntil: "networkidle0" });
-    return await page.content();
-  } finally {
-    await page.close();
-    await browser.close();
+async function renderWithBrowser(env: Env, url: string): Promise<string> {
+  const payload = await renderJson(env, url);
+  if (payload && typeof payload === "object" && "html" in payload && typeof payload.html === "string") {
+    return payload.html;
   }
+  throw new Error("Browser rendering response missing HTML");
 }
 
 /**
  * Hybrid extraction: attempt fetch + Readability, then fall back to browser rendering.
  */
-export async function extractContent(url: string, browser: Fetcher): Promise<ExtractedContent> {
+export async function extractContent(env: Env, url: string): Promise<ExtractedContent> {
   let html = "";
   try {
     html = await fetchHtml(url);
@@ -72,7 +68,7 @@ export async function extractContent(url: string, browser: Fetcher): Promise<Ext
     console.warn("Light fetch failed, falling back to browser", error);
   }
 
-  html = await renderWithBrowser(url, browser);
+  html = await renderWithBrowser(env, url);
   const parsed = parseHtml(html, url);
   if (!parsed) {
     throw new Error("Failed to extract readable content");

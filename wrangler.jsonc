@@ -52,11 +52,6 @@
       "index_name": "bookmark-vectors"
     }
   ],
-  "browser": [
-    {
-      "binding": "BROWSER"
-    }
-  ],
   "triggers": {
     "crons": ["*/30 * * * *"]
   },

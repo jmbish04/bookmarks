@@ -1,3 +1,5 @@
 APP_URL=https://replace-with-your-domain.com
+CLOUDFLARE_ACCOUNT_ID=replace-with-account-id
+CLOUDFLARE_BROWSER_RENDER_TOKEN=replace-with-browser-render-token
 PODCAST_BASE_URL=https://replace-with-your-domain.com
 RAINDROP_TOKEN=replace-with-raindrop-token

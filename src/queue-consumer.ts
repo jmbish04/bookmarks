@@ -5,6 +5,8 @@ import { getDb } from "./db/client";
 import { bookmarks, contentCache, podcastEpisodes } from "./db/schema";
 import type { BookmarkQueueMessage, Env, VectorChunk } from "./types";
 
+const MAX_QUEUE_ATTEMPTS = 3;
+
 /**
  * Chunk a long string with overlap for embedding generation.
  */
@@ -31,7 +33,7 @@ export async function handleQueue(batch: MessageBatch<BookmarkQueueMessage>, env
     const { raindropId, link, title, created } = message.body;
     try {
       const db = getDb(env);
-      const content = await extractContent(link, env.BROWSER);
+      const content = await extractContent(env, link);
       const kvKey = `html:${raindropId}`;
       await env.HTML_CACHE.put(kvKey, content.html);
 
@@ -125,7 +127,12 @@ export async function handleQueue(batch: MessageBatch<BookmarkQueueMessage>, env
             error: errorMessage
           }
         });
-      message.retry();
+
+      if (message.attempts < MAX_QUEUE_ATTEMPTS) {
+        message.retry();
+      } else {
+        message.ack();
+      }
     }
   }
 }

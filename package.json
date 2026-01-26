@@ -10,21 +10,22 @@
     "drizzle:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:build": "vite build",
-    "build": "tsc -p frontend/tsconfig.json && vite build"
+    "build": "tsc -p frontend/tsconfig.json && vite build",
+    "migrate:remote": "wrangler d1 migrations apply DB --remote"
   },
   "dependencies": {
-    "@cloudflare/puppeteer": "1.0.5",
     "@mozilla/readability": "0.6.0",
     "drizzle-orm": "0.45.1",
     "hono": "4.11.4",
+    "linkedom": "0.18.12",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.21.2",
     "@cloudflare/workers-types": "^4.20260124.0",
-    "@types/react": "^19.1.13",
-    "@types/react-dom": "^19.1.9",
+    "@types/react": "19.1.13",
+    "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "5.0.0",
     "autoprefixer": "10.4.20",
     "drizzle-kit": "0.31.8",

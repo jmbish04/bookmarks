@@ -1,7 +1,7 @@
 import type { Env, PodcastScriptResult, SummaryResult, VectorChunk } from "../types";
 
-const SUMMARY_MODEL = "@cf/meta/llama-3-8b-instruct";
-const SCRIPT_MODEL = "@cf/meta/llama-3-8b-instruct";
+const SUMMARY_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
+const SCRIPT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 const EMBEDDING_MODEL = "@cf/baai/bge-base-en-v1.5";
 const TTS_MODEL = "@cf/deepgram/aura-1";
 
@@ -10,19 +10,41 @@ const TTS_MODEL = "@cf/deepgram/aura-1";
  */
 export async function generateSummary(env: Env, text: string): Promise<SummaryResult> {
   const response = await env.AI.run(SUMMARY_MODEL, {
-    prompt: `Summarize the following article into JSON with keys summary and key_points (array):\n\n${text}`
+    messages: [
+      { role: "system", content: "Return JSON that matches the provided schema." },
+      {
+        role: "user",
+        content: `Summarize the following article.\n\n${text}`
+      }
+    ],
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        type: "object",
+        properties: {
+          summary: { type: "string" },
+          key_points: { type: "array", items: { type: "string" } }
+        },
+        required: ["summary", "key_points"]
+      }
+    }
   });
 
-  const parsed = typeof response === "string" ? JSON.parse(response) : response;
-  if (
-    typeof parsed === "object" &&
-    parsed !== null &&
-    "summary" in parsed &&
-    "key_points" in parsed &&
-    typeof (parsed as { summary: unknown }).summary === "string" &&
-    Array.isArray((parsed as { key_points: unknown }).key_points)
-  ) {
-    return parsed as SummaryResult;
+  try {
+    const parsed = typeof response === "string" ? JSON.parse(response) : response;
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      "summary" in parsed &&
+      "key_points" in parsed &&
+      typeof (parsed as { summary: unknown }).summary === "string" &&
+      Array.isArray((parsed as { key_points: unknown }).key_points)
+    ) {
+      return parsed as SummaryResult;
+    }
+  } catch (error) {
+    console.error("Failed to parse summary response", error, response);
+    throw new Error("Invalid summary response format from AI");
   }
 
   throw new Error("Invalid summary response format");
@@ -33,12 +55,33 @@ export async function generateSummary(env: Env, text: string): Promise<SummaryRe
  */
 export async function generatePodcastScript(env: Env, text: string): Promise<PodcastScriptResult> {
   const response = await env.AI.run(SCRIPT_MODEL, {
-    prompt: `Rewrite the article into a conversational podcast script. Return JSON with key script.\n\n${text}`
+    messages: [
+      { role: "system", content: "Return JSON that matches the provided schema." },
+      {
+        role: "user",
+        content: `Rewrite the article into a conversational podcast script.\n\n${text}`
+      }
+    ],
+    response_format: {
+      type: "json_schema",
+      json_schema: {
+        type: "object",
+        properties: {
+          script: { type: "string" }
+        },
+        required: ["script"]
+      }
+    }
   });
 
-  const parsed = typeof response === "string" ? JSON.parse(response) : response;
-  if (typeof parsed === "object" && parsed !== null && "script" in parsed && typeof (parsed as { script: unknown }).script === "string") {
-    return parsed as PodcastScriptResult;
+  try {
+    const parsed = typeof response === "string" ? JSON.parse(response) : response;
+    if (typeof parsed === "object" && parsed !== null && "script" in parsed && typeof (parsed as { script: unknown }).script === "string") {
+      return parsed as PodcastScriptResult;
+    }
+  } catch (error) {
+    console.error("Failed to parse podcast script response", error, response);
+    throw new Error("Invalid podcast script response format from AI");
   }
 
   throw new Error("Invalid podcast script response format");
@@ -52,7 +95,10 @@ export async function generateEmbeddings(env: Env, chunks: string[]): Promise<nu
   if (Array.isArray(response)) {
     return response as number[][];
   }
-  return (response as { data: number[][] }).data;
+  if (response && typeof response === "object" && "data" in response && Array.isArray(response.data)) {
+    return response.data as number[][];
+  }
+  throw new Error("Unexpected embedding response format");
 }
 
 /**
