@@ -41,7 +41,9 @@ app.get("/search", async (c) => {
   const embeddingResponse = await c.env.AI.run("@cf/baai/bge-base-en-v1.5", { text: query });
   const queryVector = Array.isArray(embeddingResponse)
     ? embeddingResponse[0]
-    : (embeddingResponse as { data: number[][] }).data[0];
+    : (embeddingResponse && typeof embeddingResponse === 'object' && 'data' in embeddingResponse && Array.isArray(embeddingResponse.data) && embeddingResponse.data[0])
+      ? embeddingResponse.data[0]
+      : []; // Or throw an error if an unexpected format is critical
 
   const searchResults = await c.env.VECTORIZE.query(queryVector, { topK: 5 });
   return c.json({ results: searchResults.matches });
