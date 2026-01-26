@@ -12,7 +12,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "types": ["react", "react-dom"]
+    "types": ["react", "react-dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }

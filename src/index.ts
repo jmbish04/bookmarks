@@ -1,15 +1,38 @@
-import { Hono } from "hono";
-import { desc, eq } from "drizzle-orm";
-import { DOMParser } from "linkedom";
+import { OpenAPIHono } from "@hono/zod-openapi";
+import { swaggerUI } from "@hono/swagger-ui";
+import { desc, eq, inArray } from "drizzle-orm";
+// Removed linkedom import
 import { getDb } from "./db/client";
 import { bookmarks, podcastEpisodes, syncLog } from "./db/schema";
 import { RaindropClient } from "./services/raindrop";
+import authRoutes from "./routes/auth";
+import bookmarksEndpoints from "./endpoints/bookmarks";
+import logsEndpoints from "./endpoints/logs";
 import { handleQueue } from "./queue-consumer";
-import type { BookmarkQueueMessage, Env } from "./types";
+import type { BookmarkQueueMessage } from "./types";
 
-const app = new Hono<{ Bindings: Env }>();
+const app = new OpenAPIHono<{ Bindings: Env }>();
 const MAX_QUEUE_ITEMS = 10;
 
+// OpenAPI Specification
+app.doc("/openapi.json", {
+  openapi: "3.1.0",
+  info: {
+    version: "1.0.0",
+    title: "Colby Raindrop Sync API",
+    description: "Middleware API for Raindrop.io syncing and smart ingestion.",
+  },
+});
+
+// Swagger UI
+app.get("/swagger", swaggerUI({ url: "/openapi.json" }));
+
+// Mount Routes
+app.route("/api/bookmarks", bookmarksEndpoints);
+app.route("/api/logs", logsEndpoints);
+app.route("/auth", authRoutes);
+
+// Legacy/Other Routes
 app.get("/", (c) => c.env.ASSETS.fetch(c.req.raw));
 app.get("/assets/*", (c) => c.env.ASSETS.fetch(c.req.raw));
 
@@ -69,30 +92,37 @@ const htmlEscape = (value: string): string =>
     .replace(/>/g, "&gt;")
     .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#39;");
+
 /**
- * Sanitize cached HTML by removing scriptable elements and unsafe attributes.
+ * Sanitize cached HTML by removing scriptable elements and unsafe attributes using HTMLRewriter.
  */
-const sanitizeHtml = (value: string): string => {
-  const doc = new DOMParser().parseFromString(value, "text/html");
-  doc.querySelectorAll("script, iframe, object, embed").forEach((el: Element) => el.remove());
-  doc.querySelectorAll("*").forEach((el: Element) => {
-    Array.from(el.attributes).forEach((attr) => {
-      const attribute = attr as Attr;
-      const name = attribute.name.toLowerCase();
-      const attrValue = attribute.value.trim().toLowerCase();
-      if (name.startsWith("on")) {
-        el.removeAttribute(attribute.name);
-      }
-      if (
-        (name === "href" || name === "src") &&
-        (attrValue.startsWith("javascript:") || attrValue.startsWith("data:") || attrValue.startsWith("vbscript:"))
-      ) {
-        el.removeAttribute(attribute.name);
+async function sanitizeHtml(html: string): Promise<string> {
+  const response = new Response(html);
+  
+  const rewriter = new HTMLRewriter()
+    .on("script", { element: (e) => { e.remove(); } })
+    .on("iframe", { element: (e) => { e.remove(); } })
+    .on("object", { element: (e) => { e.remove(); } })
+    .on("embed", { element: (e) => { e.remove(); } })
+    .on("*", {
+      element(e) {
+        // Safe cast to 'any' to avoid type conflict with DOM Element vs HTMLRewriter Element
+        // in some Worker type environments. HTMLRewriter Element attributes is iterable.
+        const el = e as any;
+        for (const [name, value] of el.attributes) {
+            if (name.toLowerCase().startsWith("on")) {
+                el.removeAttribute(name);
+            }
+            if ((name === "href" || name === "src") && 
+                (value.trim().toLowerCase().startsWith("javascript:") || value.trim().toLowerCase().startsWith("data:"))) {
+                el.removeAttribute(name);
+            }
+        }
       }
     });
-  });
-  return doc.body.innerHTML;
-};
+
+  return await rewriter.transform(response).text();
+}
 
 /**
  * Render the reader view for a single bookmark.
@@ -108,7 +138,8 @@ app.get("/article/:id", async (c) => {
   }
 
   const html = await c.env.HTML_CACHE.get(`html:${id}`);
-  const safeHtml = html ? sanitizeHtml(html) : "";
+  const safeHtml = html ? await sanitizeHtml(html) : "";
+  
   return c.html(`<!doctype html><html><head><title>${htmlEscape(record.title ?? record.url)}</title></head><body>
     <h1>${htmlEscape(record.title ?? record.url)}</h1>
     <p>${htmlEscape(record.byline ?? "")}</p>
@@ -160,11 +191,45 @@ app.get("/podcast.xml", async (c) => {
 export default {
   fetch: app.fetch,
   scheduled: async (_controller: ScheduledController, env: Env) => {
-    const client = new RaindropClient({ token: env.RAINDROP_TOKEN });
+    // Use static RAINDROP_TOKEN from env
+    const token = env.RAINDROP_TOKEN;
+    
+    if (!token) {
+        console.log("Skipping sync: No RAINDROP_TOKEN configured in environment.");
+        return;
+    }
+    
+    const client = new RaindropClient({ token });
     const lastSync = await getLastSync(env);
     const items = await client.listBookmarks(lastSync);
+    
+    // Deduplicate: Check which URLs are already in D1
+    const db = getDb(env);
+    const links = items.map(item => item.link);
+    
+    let validItems = items;
+    
+    if (links.length > 0) {
+        const existingRecords = await db.select({ url: bookmarks.url })
+            .from(bookmarks)
+            .where(inArray(bookmarks.url, links));
+            
+        const existingSet = new Set(existingRecords.map(r => r.url));
+        
+        validItems = items.filter(item => {
+            if (existingSet.has(item.link)) {
+                // Log duplicate skip? Maybe verbose.
+                return false; 
+            }
+            return true;
+        });
+        
+        if (items.length !== validItems.length) {
+            console.log(`[Sync] Skipped ${items.length - validItems.length} duplicate URLs.`);
+        }
+    }
 
-    const queueItems = items.slice(0, MAX_QUEUE_ITEMS).map<BookmarkQueueMessage>((item) => ({
+    const queueItems = validItems.slice(0, MAX_QUEUE_ITEMS).map<BookmarkQueueMessage>((item) => ({
       raindropId: item._id,
       link: item.link,
       title: item.title,

@@ -4,26 +4,31 @@
   "description": "Serverless personal knowledge pipeline",
   "type": "module",
   "scripts": {
-    "lint": "tsc --noEmit",
+    "lint": "pnpm run type-check",
     "test": "echo \"No tests specified\"",
+    "generate-types": "wrangler types",
+    "type-check": "pnpm run generate-types && tsc --noEmit",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "frontend:dev": "pnpm --filter frontend dev",
-    "frontend:build": "vite build",
-    "build": "tsc -p frontend/tsconfig.json && vite build",
-    "migrate:remote": "wrangler d1 migrations apply DB --remote"
+    "frontend:build": "pnpm --filter frontend build",
+    "build": "pnpm run type-check && pnpm run frontend:build",
+    "deploy": "pnpm run drizzle:migrate:remote && pnpm run build && wrangler deploy"
   },
   "dependencies": {
-    "@mozilla/readability": "0.6.0",
+    "@hono/swagger-ui": "^0.5.3",
+    "@hono/zod-openapi": "^1.2.0",
+    "cloudflare": "^5.2.0",
     "drizzle-orm": "0.45.1",
     "hono": "4.11.4",
-    "linkedom": "0.18.12",
+    "js-tiktoken": "^1.0.21",
+    "openai": "^6.16.0",
     "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "react-dom": "19.1.1",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.21.2",
-    "@cloudflare/workers-types": "^4.20260124.0",
     "@types/react": "19.1.13",
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "5.0.0",
@@ -32,6 +37,7 @@
     "postcss": "8.4.49",
     "tailwindcss": "3.4.17",
     "typescript": "5.9.3",
+    "vite": "^7.3.1",
     "wrangler": "4.60.0"
   }
 }

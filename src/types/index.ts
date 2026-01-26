@@ -1,18 +1,4 @@
-export interface Env {
-  DB: D1Database;
-  HTML_CACHE: KVNamespace;
-  PODCAST_BUCKET: R2Bucket;
-  BOOKMARK_QUEUE: Queue<BookmarkQueueMessage>;
-  AI: Ai;
-  VECTORIZE: VectorizeIndex;
-  RAINDROP_TOKEN: string;
-  APP_URL: string;
-  PODCAST_BASE_URL: string;
-  DATABASE_URL?: string;
-  ASSETS: Fetcher;
-  CLOUDFLARE_ACCOUNT_ID: string;
-  CLOUDFLARE_BROWSER_RENDER_TOKEN: string;
-}
+// Env is now defined in worker-configuration.d.ts
 
 export interface SyncLog {
   id: number;
@@ -25,6 +11,7 @@ export interface BookmarkRecord {
   raindrop_id: number;
   title: string | null;
   url: string;
+  cover_image: string | null;
   byline: string | null;
   summary: string | null;
   text_content: string | null;
@@ -53,6 +40,11 @@ export interface RaindropItem {
   title: string;
   link: string;
   created: string;
+  excerpt?: string;
+  type?: string;
+  cover?: string;
+  domain?: string;
+  tags?: string[];
 }
 
 export interface RaindropResponse {
@@ -77,6 +69,9 @@ export interface ExtractedContent {
 export interface SummaryResult {
   summary: string;
   key_points: string[];
+  tags: string[];
+  sentiment: "Positive" | "Neutral" | "Negative";
+  podcast_script?: string;
 }
 
 export interface PodcastScriptResult {
@@ -87,4 +82,14 @@ export interface VectorChunk {
   id: string;
   values: number[];
   metadata: Record<string, string | number>;
+}
+
+export interface RaindropTokenResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  token_type: string;
+  scope?: string;
+  error?: string;
+  error_description?: string;
 }

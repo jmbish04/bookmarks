@@ -137,6 +137,3 @@ out
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .dev.vars
-screenshot.png
-.wrangler/
-.DS_Store
