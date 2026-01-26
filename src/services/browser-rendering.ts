@@ -7,6 +7,9 @@ interface BrowserRenderResult {
   [key: string]: unknown;
 }
 
+const isBrowserRenderResult = (value: unknown): value is BrowserRenderResult =>
+  typeof value === "object" && value !== null && ("html" in value ? typeof (value as { html: unknown }).html === "string" : true);
+
 /**
  * Invoke the Cloudflare Browser Rendering REST API for JSON output.
  */
@@ -24,7 +27,12 @@ export async function renderJson(env: Env, url: string): Promise<BrowserRenderRe
     throw new Error(`Browser rendering JSON failed: ${response.status}`);
   }
 
-  return response.json() as Promise<BrowserRenderResult>;
+  const payload: unknown = await response.json();
+  if (!isBrowserRenderResult(payload)) {
+    throw new Error("Browser rendering JSON response invalid");
+  }
+
+  return payload;
 }
 
 /**

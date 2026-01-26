@@ -6,12 +6,24 @@ const EMBEDDING_MODEL = "@cf/baai/bge-base-en-v1.5";
 const TTS_MODEL = "@cf/deepgram/aura-1";
 
 const parseJsonResponse = <T>(response: unknown): T => {
-  const parsed = typeof response === "string" ? JSON.parse(response) : response;
-  if (!parsed || typeof parsed !== "object") {
+  if (typeof response === "string") {
+    try {
+      return JSON.parse(response) as T;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown JSON parse error";
+      throw new Error(`Failed to parse JSON response: ${message}`);
+    }
+  }
+  if (!response || typeof response !== "object") {
     throw new Error("Invalid JSON response");
   }
-  return parsed as T;
+  return response as T;
 };
+
+const isSummaryResult = (value: SummaryResult): boolean =>
+  typeof value.summary === "string" && Array.isArray(value.key_points);
+
+const isPodcastScriptResult = (value: PodcastScriptResult): boolean => typeof value.script === "string";
 
 /**
  * Generate a structured summary JSON response for the provided text.
@@ -40,7 +52,7 @@ export async function generateSummary(env: Env, text: string): Promise<SummaryRe
 
   try {
     const parsed = parseJsonResponse<SummaryResult>(response);
-    if (typeof parsed.summary === "string" && Array.isArray(parsed.key_points)) {
+    if (isSummaryResult(parsed)) {
       return parsed;
     }
   } catch (error) {
@@ -77,7 +89,7 @@ export async function generatePodcastScript(env: Env, text: string): Promise<Pod
 
   try {
     const parsed = parseJsonResponse<PodcastScriptResult>(response);
-    if (typeof parsed.script === "string") {
+    if (isPodcastScriptResult(parsed)) {
       return parsed;
     }
   } catch (error) {
