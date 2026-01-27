@@ -181,7 +181,7 @@ export default function App() {
               try {
                   const items = await fetchBookmarks();
                   setBookmarks(items);
-              } catch(e) { console.error(e) }
+              } catch(e) { console.error("Error fetching bookmarks after sync:", e) }
               setIsSyncing(false);
           }, 3000); 
           
