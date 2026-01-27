@@ -37,7 +37,7 @@ app.openapi(listRoute, async (c) => {
   const { page, perpage, collectionId } = c.req.valid("query");
   
   const cookieHeader = c.req.header("Cookie");
-  console.log(`[API Bookmarks] Cookie Header: ${cookieHeader ? "PRESENT" : "MISSING"} | Value: ${cookieHeader ? cookieHeader.substring(0, 15) + "..." : "-"}`);
+  await service.logger.info(`Cookie Header: ${cookieHeader ? "PRESENT" : "MISSING"} | Value: ${cookieHeader ? cookieHeader.substring(0, 15) + "..." : "-"}`);
   
   const userToken = getCookie(c, "raindrop_access_token");
   console.log(`[API Bookmarks] Extracted Token: ${userToken ? "PRESENT" : "MISSING"}`);
