@@ -116,7 +116,8 @@ export class ArticleAnalystAgent {
     const tokenCount = this.countTokens(text);
     
     // Safety margin: Reserve space for system prompt + expected output
-    const reservedTokens = this.modelSpec.maxOutputTokens + 2000; 
+    const OUTPUT_TOKEN_BUFFER = 2000; // Buffer for system prompt and potential overhead
+    const reservedTokens = this.modelSpec.maxOutputTokens + OUTPUT_TOKEN_BUFFER;
     const effectiveLimit = this.modelSpec.contextWindow - reservedTokens;
 
     console.log(`[Agent] Input Tokens: ${tokenCount.toLocaleString()} / Limit: ${effectiveLimit.toLocaleString()}`);
