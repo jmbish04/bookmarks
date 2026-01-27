@@ -1,6 +1,10 @@
 import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
+import { getCookie } from "hono/cookie";
 import { HybridService } from "../services/hybrid";
+import { RaindropClient } from "../services/raindrop";
+import { Logger } from "../services/logger";
 import { BookmarkListSchema, BookmarkSubmitSchema, BookmarkListResponseSchema } from "../schemas/bookmark";
+import type { BookmarkQueueMessage } from "../types";
 
 const app = new OpenAPIHono<{ Bindings: Env }>();
 
@@ -31,16 +35,15 @@ const listRoute = createRoute({
   },
 });
 
-import { getCookie } from "hono/cookie";
-
 app.openapi(listRoute, async (c) => {
   const { page, perpage, collectionId } = c.req.valid("query");
   
+  const logger = new Logger(c.env, "API:Bookmarks");
   const cookieHeader = c.req.header("Cookie");
-  await service.logger.info(`Cookie Header: ${cookieHeader ? "PRESENT" : "MISSING"} | Value: ${cookieHeader ? cookieHeader.substring(0, 15) + "..." : "-"}`);
+  await logger.info(`Cookie Header: ${cookieHeader ? "PRESENT" : "MISSING"} | Value: ${cookieHeader ? cookieHeader.substring(0, 15) + "..." : "-"}`);
   
   const userToken = getCookie(c, "raindrop_access_token");
-  console.log(`[API Bookmarks] Extracted Token: ${userToken ? "PRESENT" : "MISSING"}`);
+  await logger.info(`Extracted Token: ${userToken ? "PRESENT" : "MISSING"}`);
   
   const service = new HybridService(c.env, userToken);
 
@@ -134,10 +137,6 @@ const syncRoute = createRoute({
     },
   },
 });
-
-import { RaindropClient } from "../services/raindrop";
-import { Logger } from "../services/logger";
-import type { BookmarkQueueMessage } from "../types";
 
 app.openapi(syncRoute, async (c) => {
   const logger = new Logger(c.env, "RaindropSync");
