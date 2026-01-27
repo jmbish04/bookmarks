@@ -72,7 +72,8 @@ const SUMMARY_SCHEMA = {
         enum: ["Positive", "Neutral", "Negative"] 
       },
       podcast_script: {
-        type: ["string", "null"],
+        type: "string",
+        nullable: true,
         description: "A conversational, engaging solo podcast script based on the article, under 5 minutes."
       }
     },
