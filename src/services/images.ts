@@ -9,10 +9,9 @@ const CF_IMAGES_API = "https://api.cloudflare.com/client/v4/accounts";
 export async function uploadToCloudflareImages(env: Env, imageBuffer: ArrayBuffer, id: string): Promise<string | null> {
     const logger = new Logger(env, "ImagesService");
     
-    // 1. Check for Token and Binding
+    // 1. Check for Token
     const token = env.CLOUDFLARE_IMAGES_TOKEN;
     const accountId = env.CLOUDFLARE_ACCOUNT_ID;
-    const imagesBinding = env.IMAGES;
 
     if (!token) {
         await logger.warn("Skipping image upload: CLOUDFLARE_IMAGES_TOKEN not configured.");
@@ -30,11 +29,6 @@ export async function uploadToCloudflareImages(env: Env, imageBuffer: ArrayBuffe
 
     // 2. Upload Original PNG (Matching Python Script success)
     // Optimization block removed to ensure reliability and match user preference for PNG capture.
-    
-    // Default values (already set above, but reiterated for clarity)
-    uploadBuffer = imageBuffer;
-    extension = "png";
-    mimeType = "image/png";
     
     await logger.info(`Uploading raw screenshot (${uploadBuffer.byteLength} bytes) to Cloudflare Images...`);
 
