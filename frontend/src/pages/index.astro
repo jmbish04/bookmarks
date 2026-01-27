@@ -1,0 +1,207 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+---
+
+<Layout title="Daily Sync Dashboard" bodyClass="bg-background-light dark:bg-background-dark text-zinc-950 dark:text-zinc-50 font-display overflow-hidden h-screen flex flex-col">
+<!-- Main Layout: Sidebar + Content Area -->
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Sidebar -->
+<aside class="w-[250px] shrink-0 flex flex-col border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 z-20 hidden md:flex">
+<!-- Header -->
+<div class="h-16 flex items-center px-6 border-b border-zinc-200 dark:border-zinc-800/50">
+<div class="flex items-center gap-2">
+<div class="size-6 bg-zinc-950 dark:bg-white rounded-md flex items-center justify-center">
+<span class="material-symbols-outlined text-white dark:text-zinc-950 text-base" data-icon="sync">sync</span>
+</div>
+<span class="text-sm font-bold tracking-tight">Daily Sync</span>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-1">
+<div class="px-3 mb-2">
+<p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Menu</p>
+</div>
+<Button variant="secondary" className="w-full justify-start gap-3 px-3">
+    <span class="material-symbols-outlined text-[20px]" data-icon="home">home</span>
+    Home
+</Button>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
+    <span class="material-symbols-outlined text-[20px]" data-icon="library_books">library_books</span>
+    <a href="/reader" class="flex-1 text-left">Library</a>
+</Button>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
+    <span class="material-symbols-outlined text-[20px]" data-icon="headphones">headphones</span>
+    <a href="/split" class="flex-1 text-left">Podcasts</a>
+</Button>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
+    <span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+    <a href="/detail" class="flex-1 text-left">Settings</a>
+</Button>
+
+<div class="mt-8 px-3 mb-2">
+<p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Collections</p>
+</div>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
+    <span class="material-symbols-outlined text-[20px]" data-icon="bookmark">bookmark</span>
+    Favorites
+</Button>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
+    <span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
+    Recently Played
+</Button>
+</nav>
+<!-- Status & User -->
+<div class="p-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<div class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+</div>
+<span class="text-xs text-zinc-500 dark:text-zinc-400">Synced 5m ago</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden relative">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz1Zo96lJIAKY1kZGrb_qWBqfYz2EnwZk8FehPUFcVJbfcDcYSFn5hsNk_H81v_bdxepkNOPkwWwvoylSm66WTbzPUhangDaqOuNnzHSkxmZc6-L8UJ3ILSM7yy6gWqILSGl_LiZyXVImoOi2sB3owco9ajNiUrK9R7G1LYmy-1Uc1j9aF-vbXbtyIoW_D_LxEe9jAfVdhQS1STVmaRIXQ9WJCoJP1ZLHQ6lJVvLfV0iKLEpE5Vz3w7qS5LbLTC3uvxRdY-1ky_UA" alt="AD" class="h-full w-full object-cover" />
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-medium leading-none">Alex Doe</span>
+<span class="text-xs text-zinc-500 dark:text-zinc-400">Pro Plan</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-white dark:bg-zinc-950 relative">
+<div class="max-w-[1400px] mx-auto p-6 md:p-10 pb-32">
+<!-- Page Heading -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div class="flex flex-col gap-2">
+<h1 class="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white">Today's Feed</h1>
+<p class="text-zinc-500 dark:text-zinc-400 text-sm md:text-base">Your personalized news digest from Raindrop.io</p>
+</div>
+<div class="flex items-center gap-2">
+<Button variant="outline" className="gap-2 bg-white dark:bg-zinc-900">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+                            Refresh
+</Button>
+</div>
+</header>
+<!-- Filter Chips -->
+<div class="flex flex-wrap gap-2 mb-8">
+<Button variant="default" className="rounded-full h-8 text-xs">All</Button>
+<Button variant="outline" className="rounded-full h-8 text-xs bg-transparent">AI</Button>
+<Button variant="outline" className="rounded-full h-8 text-xs bg-transparent">Hardware</Button>
+<Button variant="outline" className="rounded-full h-8 text-xs bg-transparent">Design</Button>
+<Button variant="outline" className="rounded-full h-8 text-xs bg-transparent">Startups</Button>
+<Button variant="outline" className="rounded-full h-8 text-xs bg-transparent">Read Later</Button>
+</div>
+<!-- Masonry Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+{[
+    { title: "The Future of LLMs in Edge Computing", desc: "How quantization is enabling models to run on consumer hardware with surprising efficiency.", tags: ["AI", "Hardware"], time: "2h ago", read: "5 min listen", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC2_Cc-9tR_d2B3Nna1amBszmumceXqVz3zWLaCIfkHHmWabtV848CG9bm_rpxGYPCWmN0vMvD8UZsjP7Y5siQ0nIsWVuYNEHK_9qSLOjSLcj6cLF3Gu35bpAphQsh9tOpRmr3Vu5oMpZcEYw8-AS8jB4WxXVvSWUjrkp5OVOJriv3PFWPzfcddfJsT_M3BDE9hmm1SHStSSY21Rm2jqLE2Ox5XLKGxobX6O3a0g2KyBZba8slOeA3GkPLfWOOU4_2Km-qM6iFZGJc", link: "/reader" },
+    { title: "React Server Components Deep Dive", desc: "Understanding the new paradigm and mental model shifts required for RSC architecture.", tags: ["Dev", "React"], time: "4h ago", read: "12 min listen", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCVRvDND1Wg2lx9Illrnd-tlMsenPtT2qEwqFlWvnC6DU3-N4b-SCoS9udXoepWIhXOJ8ykc6yIX6OFft42ZKkBTXFi2iPYF1aDEN3_Zz7wlddRK8L6IO3YA6fRUQn5IEk4y0UrBnOWH8epMd7e37TbEvuJ_0GtDxy1aNXKFf30atD6X10hQdEQ2_DLPlw_WE_r3oFELbin2f2vY1LtV8H8H12xtU6iVQPYIf0Tgwip0ZyHzGD8lcHo02j55TokX4MapDYrK8e_EL0", link: "/split" },
+    { title: "Advances in Nuclear Fusion", desc: "Recent breakthroughs in net energy output marking a significant step forward.", tags: ["Energy", "Science"], time: "6h ago", read: "8 min listen", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAj2h0mMPVB09k4UFMUJNgIkmQkx57WiIcYggiiKswLW0yOEqbm_4MWGgFEKYPF86pGtjrypWiIyeMRFpcZto_9VabF-z9mmTSkUoogMXmDlz1MpdH8OCoMHN9BzyZIf5istERN1lr7MQox6wkIQUrBE9erMukIUPBdHZwWAq9LQ8hQ7AcHp1kdTZnd-zbCO0j8mFdzcpaWSBXRXN1UYd9ZcD4Jynjhll84Xesi-wAtkuYm2i2Nqyw-73zmvm8lNtfBtiqarEMQgto", link: "/detail" },
+    { title: "Rust in the Linux Kernel", desc: "Memory safety improvements in the latest kernel release and what it means for stability.", tags: ["Linux", "Rust"], time: "12h ago", read: "20 min listen", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDWnH1FAq0rLgvyH38PWL9-LDKHbKhBSankBbfQMxcSCWgJYCZ1aC4xjzMJi5BjLSDXsyOLHEJvkuDE1HRmnXPEuyr404tXxZyx43A4H0lWwi57zFqJzrWk7rEH6noW-0DU9yQ8CKe-bqwsOGKgFH7O3_YqKahd6yrfk9Dz8idaMDww_UC3bhOgeIhaAP1N2lobs98ZvErwd2V3PK-PNolYbok9AiWrLBTeywrBZLkQAQWgv1MwmCLexMXCmV1-PlEtBVc58iNXj3o", link: "#" },
+    { title: "Generative UI Patterns", desc: "Exploring dynamic interface generation based on user intent.", tags: ["Design", "AI"], time: "1d ago", read: "7 min listen", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBm4FBkTTX4-QZuh7X-hcikWiFKoptwhr039-tRBS0x5ZKCxD7xgjN5ymiA7raGqBn0eOeGK1KkOjw4IgylNp_RNWUcqGzt3jjoAEfHH6Dt2cP3vgLPHs0BGHYojlyILba4SsU_fcU8-TjvyBBFH85woVsgPlt5m3AA74kaD7W0wwZWamWW2f5Ouejh3QIOkeoH7w--swk8J58Jcfusp2GzL5zGgaMCQWuJkz5NYzdn5A-GQZnRwOmSlV-l2DpxkIjgVRBVZkwufkQ", link: "#" },
+    { title: "The State of WebAssembly", desc: "How Wasm is moving beyond the browser into serverless environments.", tags: ["Web", "Serverless"], time: "1d ago", read: "15 min listen", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuC9tM1LH2X7zXk_BLsoRb5u6nYw5fDz-TVaI831uvyqIkNsiLCqovbHLY9Zpl0FtlysWJVZVmhrOrMcpL6PssnAPai4Wr7ww2OQRIwzluTRAxssbNuSAoEsTT7FF2RZ95KxofOMjfgttLAFP3UrXL4YhgkkpVS8UUGGYQ_sMXa3c2A3XShd1B-mRudjgznSmeUn7HlqCdbuLqsdwJhmrsJRyzMqesEyPyKDs5nHopgFubjChRRP341AUaMfmbqUYS2grZq66XBJb4w", link: "#" },
+].map(card => (
+    <Card className="group relative flex flex-col overflow-hidden border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
+        <a href={card.link} class="block">
+            <div class="relative aspect-video w-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
+                <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={`background-image: url('${card.img}')`}></div>
+                <div class="absolute inset-0 m-auto size-12 flex items-center justify-center rounded-full bg-white text-black opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                    <span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+                </div>
+            </div>
+        </a>
+        <CardContent className="flex flex-col gap-3 p-4">
+            <h3 class="text-base font-bold leading-tight text-zinc-900 dark:text-zinc-50">
+                <a href={card.link} class="hover:underline">{card.title}</a>
+            </h3>
+            <p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-2">{card.desc}</p>
+            <div class="flex flex-wrap gap-2 mt-auto pt-2">
+                {card.tags.map(tag => (
+                    <Badge variant="outline" className="text-[10px] uppercase border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-medium rounded px-2 py-0.5">{tag}</Badge>
+                ))}
+            </div>
+            <div class="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-600 mt-1 font-mono">
+                <span>{card.time}</span>
+                <span>•</span>
+                <span>{card.read}</span>
+            </div>
+        </CardContent>
+    </Card>
+))}
+
+</div>
+</div>
+</main>
+</div>
+<!-- Persistent Player Footer -->
+<footer class="h-24 w-full border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 flex flex-col shrink-0 z-50">
+<!-- Progress Bar (Full Width Top) -->
+<div class="group/progress w-full h-1 bg-zinc-200 dark:bg-zinc-800 cursor-pointer relative">
+    <div class="absolute top-0 left-0 h-full w-[35%] bg-zinc-900 dark:bg-white transition-all group-hover/progress:h-1.5"></div>
+</div>
+<div class="flex-1 flex items-center justify-between px-6">
+<!-- Track Info -->
+<div class="flex items-center gap-4 w-1/3 min-w-0">
+<div class="size-12 rounded-md bg-zinc-200 dark:bg-zinc-800 bg-cover bg-center shrink-0" data-alt="Current track thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQaRSmzoJmThTkvUpDxsXQy5GBtf3CUioX_wYSo_4oHn1DeQYj3bexJMnEiW072I4trKNL2SyMcs1uWF_unybYfNfhxlWuK6ZoSZaMX8Ui2lHRrkJIdd2VWzyNauqm4KGzeqzbphq49MhJYmoan39RFq-_RiQbr7ndGHhmPQbDOPyHcPuaaryB8R4lWwqIoLUIJV5maHdU0H1gN0yV7M3ig_rN6Sn2vOB-gzxkMKuOLBhQ_3-nSvNdfYYrkebu66xSWzzEUFJkcvw')"></div>
+<div class="flex flex-col min-w-0 overflow-hidden">
+<span class="text-sm font-bold text-zinc-900 dark:text-white truncate">Daily Summary: Oct 24</span>
+<span class="text-xs text-zinc-500 dark:text-zinc-400 truncate">Daily Sync AI</span>
+</div>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white ml-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="favorite">favorite</span>
+</Button>
+</div>
+<!-- Controls -->
+<div class="flex flex-col items-center justify-center gap-1 w-1/3">
+<div class="flex items-center gap-4">
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[24px]" data-icon="shuffle">shuffle</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-900 dark:text-white hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[28px]" data-icon="skip_previous">skip_previous</span>
+</Button>
+<Button size="icon" className="flex items-center justify-center size-10 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:scale-105 transition-transform shadow-md">
+<span class="material-symbols-outlined text-[24px] fill-current" data-icon="pause">pause</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-900 dark:text-white hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[28px]" data-icon="skip_next">skip_next</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[24px]" data-icon="repeat">repeat</span>
+</Button>
+</div>
+<div class="flex items-center gap-2 w-full max-w-[300px]">
+<span class="text-[10px] font-mono text-zinc-500 w-8 text-right">1:17</span>
+<div class="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800 relative">
+    <div class="absolute h-full w-[35%] bg-zinc-500 dark:bg-zinc-400 rounded-full"></div>
+</div>
+<span class="text-[10px] font-mono text-zinc-500 w-8">3:42</span>
+</div>
+</div>
+<!-- Extra Controls (Volume) -->
+<div class="flex items-center justify-end gap-3 w-1/3">
+<Button variant="ghost" className="h-8 px-2 text-zinc-500 dark:text-zinc-400">
+<span class="text-xs font-bold">1.5x</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px]" data-icon="queue_music">queue_music</span>
+</Button>
+<div class="flex items-center gap-2 group/volume w-24">
+<span class="material-symbols-outlined text-[20px] text-zinc-500 dark:text-zinc-400" data-icon="volume_up">volume_up</span>
+<div class="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800 relative cursor-pointer">
+<div class="absolute top-0 left-0 h-full w-[70%] bg-zinc-500 dark:bg-zinc-400 group-hover/volume:bg-zinc-900 dark:group-hover/volume:bg-white transition-colors"></div>
+</div>
+</div>
+</div>
+</div>
+</footer>
+</Layout>

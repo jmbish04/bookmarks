@@ -1,0 +1,164 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+---
+
+<Layout title="Distraction-Free Reader View" bodyClass="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display text-zinc-900 dark:text-zinc-400 selection:bg-primary/30 selection:text-white antialiased overflow-x-hidden">
+<!-- Sticky Top Navigation -->
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-zinc-200 dark:border-zinc-800 glass-header h-14 transition-all duration-300 backdrop-blur-md bg-white/70 dark:bg-zinc-950/70">
+<div class="w-full h-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+<!-- Left: Back Navigation -->
+<a class="group flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-white transition-colors duration-200" href="/">
+<span class="material-symbols-outlined text-[20px] group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+<span>Back to Feed</span>
+</a>
+<!-- Right: Actions -->
+<div class="flex items-center gap-2">
+<Button variant="ghost" size="icon" aria-label="Share" className="text-zinc-400 hover:text-white hover:bg-zinc-800">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+</Button>
+<Button variant="ghost" size="icon" aria-label="Archive" className="text-zinc-400 hover:text-white hover:bg-zinc-800">
+<span class="material-symbols-outlined text-[20px]">archive</span>
+</Button>
+</div>
+</div>
+</header>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex justify-center w-full pt-24 pb-32 px-4 sm:px-6">
+<div class="flex w-full max-w-[1100px] relative gap-12">
+<!-- Article Column -->
+<article class="w-full max-w-[650px] mx-auto flex flex-col gap-8">
+<!-- Article Header -->
+<header class="flex flex-col gap-6 border-b border-zinc-800 pb-8">
+<h1 class="text-zinc-900 dark:text-white text-3xl sm:text-4xl md:text-[2.75rem] font-bold leading-[1.15] tracking-tight">
+                        The Future of Asynchronous Synchronization in React 19
+                    </h1>
+<div class="flex items-center justify-between flex-wrap gap-4">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 ring-2 ring-zinc-800 rounded-full overflow-hidden relative">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAqsrb8wXCsk4ZuCBYHnQwdULSXcJ-Vme8gTytQQNf1hpj_0_PrdgcmU6J8cwM24eP1YTo-3pay017d8Ls_oumsipEppPQb2riqmNXqeZtVU3tMhbBqxniTn9KdSGeWtS4DWcloYjs_ar5je4aNJ6dn2_UJonV8xp0zACpT5acE4-DLnIOzfivVR-AC9n46JRjIokxoT8s8z-3ISNdNxchi7E-I0u21dhsAf014S8S8FCALOtTAZgIBOmxdPouzH3fNWPf8g6pMhU" alt="SJ" class="h-full w-full object-cover" />
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-zinc-200">Sarah Jenkins</span>
+<span class="text-xs text-zinc-500">Engineering Lead @ Vercel</span>
+</div>
+</div>
+<div class="flex items-center gap-3 text-sm text-zinc-500 font-medium">
+<span class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[16px]">schedule</span> 8 min read</span>
+<span class="w-1 h-1 rounded-full bg-zinc-700"></span>
+<span>Oct 24, 2023</span>
+</div>
+</div>
+</header>
+<!-- Article Body -->
+<div class="prose prose-invert prose-zinc max-w-none prose-lg prose-headings:font-bold prose-headings:tracking-tight prose-p:leading-8 prose-p:text-zinc-400 prose-a:text-primary hover:prose-a:text-primary/80">
+<p class="lead text-xl text-zinc-300 font-medium leading-relaxed">
+                        React 19 introduces a paradigm shift in how we handle asynchronous data. This distraction-free view allows you to focus purely on the technical details without the noise of modern web layouts.
+                    </p>
+<p>
+                        The core concept revolves around optimizing the hydration process to ensure time-to-interactive is minimal. For years, developers have struggled with the "waterfall" problem in data fetching. Components would mount, initiate a fetch, wait, and then render children which might trigger their own fetches.
+                    </p>
+<h2>Server Components Explained</h2>
+<p>
+                        Server Components allow developers to build applications that span the server and client. This combines the rich interactivity of client-side apps with the improved performance of traditional server rendering. By moving the data fetching logic closer to the database, we reduce latency and bundle size.
+                    </p>
+<!-- Code Block -->
+<div class="not-prose my-8">
+<div class="rounded-lg bg-[#111113] border border-zinc-800 overflow-hidden shadow-sm group">
+<div class="flex items-center justify-between px-4 py-2 border-b border-zinc-800 bg-zinc-900/50">
+<span class="text-xs font-mono text-zinc-500">data-fetcher.ts</span>
+<Button variant="ghost" size="sm" className="h-6 text-xs text-zinc-500 hover:text-zinc-300 gap-1.5">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+                                    Copy
+</Button>
+</div>
+<div class="p-5 overflow-x-auto">
+<pre class="font-mono text-sm leading-6"><code class="language-typescript"><span class="text-primary">async function</span> <span class="text-[#e06c75]">getData</span>() &#123;
+  <span class="text-zinc-500">// Fetch data directly on the server</span>
+  <span class="text-primary">const</span> res = <span class="text-primary">await</span> <span class="text-[#e06c75]">fetch</span>(<span class="text-[#98c379]">'https://api.example.com/data'</span>, &#123;
+    cache: <span class="text-[#98c379]">'no-store'</span>
+  &#125;);
+
+  <span class="text-primary">if</span> (!res.ok) &#123;
+    <span class="text-primary">throw new</span> <span class="text-[#e06c75]">Error</span>(<span class="text-[#98c379]">'Failed to fetch data'</span>);
+  &#125;
+
+  <span class="text-primary">return</span> res.<span class="text-[#e06c75]">json</span>();
+&#125;</code></pre>
+</div>
+</div>
+</div>
+<h3>Automatic Batching</h3>
+<p>
+                        Another significant improvement is automatic batching for all state updates. Previously, React only batched updates inside event handlers. Now, updates inside of promises, setTimeouts, native event handlers, or any other event are batched by default. This results in fewer renders and better performance.
+                    </p>
+<p>
+                        As we move forward, adopting these patterns will become second nature. The mental model shifts from "how do I optimize this render?" to "where should this code live?".
+                    </p>
+</div>
+<!-- Article Footer / Divider -->
+<div class="mt-8 border-t border-zinc-800 pt-8 flex items-center justify-between">
+<p class="text-sm text-zinc-600 italic">Originally published on The Daily Sync Engineering Blog.</p>
+</div>
+</article>
+<!-- Sidebar (Right) - Desktop Only -->
+<aside class="hidden xl:block w-72 shrink-0">
+<div class="sticky top-28 flex flex-col gap-8">
+<!-- Table of Contents / Outline -->
+<div class="flex flex-col gap-3">
+<h4 class="text-xs font-bold uppercase tracking-wider text-zinc-500">On this page</h4>
+<ul class="flex flex-col gap-2 border-l border-zinc-800 pl-4 text-sm">
+<li><a class="text-zinc-200 hover:text-primary transition-colors block py-1" href="#">Introduction</a></li>
+<li><a class="text-zinc-400 hover:text-primary transition-colors block py-1" href="#">Server Components Explained</a></li>
+<li><a class="text-zinc-400 hover:text-primary transition-colors block py-1" href="#">Code Example</a></li>
+<li><a class="text-zinc-400 hover:text-primary transition-colors block py-1" href="#">Automatic Batching</a></li>
+</ul>
+</div>
+<!-- Tags Section -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h4 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Topics</h4>
+<Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-600 hover:text-zinc-300" title="Edit Tags">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</Button>
+</div>
+<div class="flex flex-wrap gap-2">
+<Badge variant="secondary" className="bg-transparent border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 hover:border-zinc-600 cursor-pointer rounded-md font-medium px-2.5 py-1">React</Badge>
+<Badge variant="secondary" className="bg-transparent border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 hover:border-zinc-600 cursor-pointer rounded-md font-medium px-2.5 py-1">Performance</Badge>
+<Badge variant="secondary" className="bg-transparent border border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200 hover:border-zinc-600 cursor-pointer rounded-md font-medium px-2.5 py-1">Web Dev</Badge>
+
+<Button variant="outline" size="sm" className="h-auto border-dashed border-zinc-700 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300 hover:border-zinc-500 text-xs px-2.5 py-1">
+<span class="material-symbols-outlined text-[14px] mr-1">add</span> Add
+</Button>
+</div>
+</div>
+<!-- Related Read -->
+<div class="flex flex-col gap-3 pt-6 border-t border-zinc-800">
+<h4 class="text-xs font-bold uppercase tracking-wider text-zinc-500">Related</h4>
+<a class="group block" href="#">
+<h5 class="text-sm font-semibold text-zinc-300 group-hover:text-primary transition-colors mb-1">Understanding Next.js 14 App Router</h5>
+<p class="text-xs text-zinc-500">Nov 12 • 5 min read</p>
+</a>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Floating Utility Bar (Bottom Right) -->
+<div class="fixed bottom-6 right-6 z-40 animate-fade-in-up">
+<div class="flex items-center gap-3 p-2 bg-zinc-900/90 backdrop-blur-sm border border-zinc-800 rounded-xl shadow-2xl shadow-black/50 ring-1 ring-white/5">
+<Button className="flex items-center gap-2 h-10 px-4 rounded-lg bg-white text-zinc-950 font-semibold text-sm hover:bg-zinc-200 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px] fill-current">play_circle</span>
+                Listen
+</Button>
+<div class="w-px h-6 bg-zinc-700"></div>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white hover:bg-zinc-800" title="Print Article">
+<span class="material-symbols-outlined text-[20px]">print</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white hover:bg-zinc-800" title="Adjust Text Size">
+<span class="material-symbols-outlined text-[20px]">text_fields</span>
+</Button>
+</div>
+</div>
+</Layout>
