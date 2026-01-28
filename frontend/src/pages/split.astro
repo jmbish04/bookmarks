@@ -1,0 +1,237 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+---
+
+<Layout title="Desktop Split-Screen Reader View" bodyClass="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-hidden h-screen flex">
+<!-- Collapsed Sidebar -->
+<nav class="w-[64px] flex flex-col items-center py-6 border-r border-[#27272a] bg-[#09090b] shrink-0 z-20">
+<div class="mb-8 text-primary">
+<span class="material-symbols-outlined text-[28px] font-bold">graphic_eq</span>
+</div>
+<div class="flex flex-col gap-6 w-full items-center">
+<Button variant="ghost" size="icon" className="size-10 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors group relative" asChild>
+<a href="/">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<!-- Tooltip placeholder logic would go here -->
+</a>
+</Button>
+<Button variant="ghost" size="icon" className="size-10 rounded-lg bg-primary/20 text-primary transition-colors hover:bg-primary/30">
+<span class="material-symbols-outlined text-[24px] fill-1">book_2</span>
+</Button>
+<Button variant="ghost" size="icon" className="size-10 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</Button>
+<Button variant="ghost" size="icon" className="size-10 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[24px]">bookmark</span>
+</Button>
+</div>
+<div class="mt-auto flex flex-col gap-6 w-full items-center">
+<Button variant="ghost" size="icon" className="size-10 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+</Button>
+<div class="size-8 rounded-full border border-white/10 mt-2 overflow-hidden relative">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3WNm4Ylfz60y4FtbUp0OBIiR8ehIWrtuv5g4ErHYRUimPfuN2uDWDWRryNpSfMVMS6vgQTRTQjnR0Wxu96h9uEl0KjYsZyxoxE_0k4sFAhRN_WshylKBui1LT9xx1Grz3Q9-5FXNyEUqwALyRAgUuawD_jF6c6Le3sniYjFsnFLNt_cpkNMRc6A2Nx3-qWX9AYtWDwQdMzV84UwWcfl20Tmhr14UfsA8M0JjVPv8tjlM6r0GrW6-BXB-BT87F4DoeXglEZ7K1A88" alt="U" class="h-full w-full object-cover" />
+</div>
+</div>
+</nav>
+<!-- Main Layout -->
+<main class="flex flex-col flex-1 h-full min-w-0 bg-[#09090b]">
+<!-- Top Unified Playback Controller -->
+<header class="h-16 shrink-0 border-b border-[#27272a] bg-[#09090b]/95 backdrop-blur flex items-center justify-between px-6 z-10">
+<!-- Left: Document Info -->
+<div class="flex items-center gap-4 min-w-0 flex-1">
+<div class="size-10 rounded bg-[#27272a] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white/60">article</span>
+</div>
+<div class="flex flex-col min-w-0">
+<h2 class="text-sm font-semibold text-white truncate">The Future of Large Language Models</h2>
+<p class="text-xs text-[#a1a1aa] truncate">Research Paper • Updated 2h ago</p>
+</div>
+</div>
+<!-- Center: Player Controls -->
+<div class="flex flex-col items-center justify-center flex-1 max-w-2xl px-4 gap-1">
+<div class="flex items-center gap-6">
+<Button variant="ghost" size="icon" className="text-[#a1a1aa] hover:text-white transition-colors hover:bg-transparent">
+<span class="material-symbols-outlined text-[20px]">shuffle</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-white hover:text-primary transition-colors hover:bg-transparent">
+<span class="material-symbols-outlined text-[28px] fill-1">skip_previous</span>
+</Button>
+<Button size="icon" className="size-10 rounded-full bg-white text-black hover:scale-105 transition-transform hover:bg-white/90">
+<span class="material-symbols-outlined text-[28px] fill-1">pause</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-white hover:text-primary transition-colors hover:bg-transparent">
+<span class="material-symbols-outlined text-[28px] fill-1">skip_next</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-[#a1a1aa] hover:text-white transition-colors relative group hover:bg-transparent">
+<span class="text-xs font-bold font-mono border border-[#a1a1aa] rounded px-1 group-hover:border-white">1.5x</span>
+</Button>
+</div>
+<!-- Progress Bar -->
+<div class="w-full flex items-center gap-3 mt-1 group cursor-pointer">
+<span class="text-[10px] text-[#71717a] font-mono tabular-nums">04:12</span>
+<div class="relative h-1 flex-1 bg-[#27272a] rounded-full overflow-hidden">
+<div class="absolute inset-y-0 left-0 w-[34%] bg-primary"></div>
+</div>
+<span class="text-[10px] text-[#71717a] font-mono tabular-nums">12:30</span>
+</div>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center justify-end gap-3 flex-1">
+<Button variant="secondary" className="flex items-center gap-2 px-3 py-1.5 rounded bg-[#27272a] hover:bg-[#3f3f46] text-xs font-medium text-white transition-colors border border-white/5 h-8">
+<span class="material-symbols-outlined text-[16px]">share</span>
+<span>Share</span>
+</Button>
+<Button variant="ghost" size="icon" className="size-8 rounded hover:bg-[#27272a] text-[#a1a1aa] hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</Button>
+</div>
+</header>
+<!-- Split Screen Content -->
+<div class="flex flex-1 overflow-hidden">
+<!-- LEFT PANE: Article Reader -->
+<div class="flex-1 overflow-y-auto bg-[#09090b] relative scroll-smooth group/left">
+<div class="max-w-[720px] mx-auto py-12 px-8">
+<!-- Article Header -->
+<div class="mb-10 border-b border-[#27272a] pb-8">
+<span class="inline-block px-2 py-1 mb-4 text-[10px] font-bold tracking-wider uppercase bg-primary/10 text-primary rounded">Artificial Intelligence</span>
+<h1 class="text-3xl md:text-4xl font-bold text-white leading-tight mb-4 tracking-tight">Large Language Models: A Paradigm Shift in Computing</h1>
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-zinc-800 overflow-hidden relative">
+    <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_5caOeS2bkWhjpdWaQeVY_bIBucIMXeP7vR2L-X0qWNkF7PVLeXPsAsb3206ZImFVvubLP7M3Tur422j6d6AVZxiV705KhwF1SdU6XsUxC64Q2WBsRoGd4_meE7js38wsnxoHYnXgqLMZpek_zLG648TEmyewDP9zg-BLxgzivvaEOzt7VmsNVZslMSX5tY-2vKRrHHC21-HCS8Dgw1OHhlZvIyYk8Mmp3IcrisaIgGBypgLpdtm7-koNlB7YJjcYE5QyLkKe_eI" alt="SC" class="h-full w-full object-cover" />
+</div>
+<div class="text-sm">
+<span class="text-white font-medium">Dr. Sarah Chen</span>
+<span class="text-[#71717a]"> • Published Oct 24, 2023</span>
+</div>
+</div>
+</div>
+<!-- Article Body -->
+<article class="prose prose-invert prose-lg max-w-none text-[#a1a1aa]">
+<p class="lead text-white text-xl leading-relaxed mb-6">
+                            Large language models (LLMs) represent a significant shift in artificial intelligence capabilities. By processing vast amounts of text data, these models learn to predict and generate human-like text with unprecedented accuracy.
+                        </p>
+<div class="my-8 rounded-xl overflow-hidden border border-[#27272a]">
+<img class="w-full h-64 object-cover" data-alt="Abstract visualization of neural network connections glowing blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAR91WSgzdCR9lMtoIgTZEYL0ZS9ffbZh_LjclsCi_vJzl41hlXP6-UNcpQeFrdbryPITZAYOSiXWum0IWiKaTVzaU26-NhIUULKr3JN52CJ6_4C6kOZ1kFbcggTHq_DURrCeDKqYeNrBtXWOaUYqIaZbhs7QYKkh177s65SxzVejkDQ3poZt8i1mj_IAwDDI_oK1Hnjf2gCpzSKDrUtfTlVQ1cYVwvaBf7JspPYeTqpWnhI13SFtOWB3oX0PZxXilEJTMqDztjgs8"/>
+<div class="bg-[#18181b] px-4 py-2 text-xs text-[#71717a] border-t border-[#27272a]">
+                                Figure 1: Neural pathways visualization in high-dimensional space.
+                            </div>
+</div>
+<h3 class="text-white text-xl font-bold mt-8 mb-4">The Architecture of Understanding</h3>
+<p class="mb-6 leading-relaxed">
+                            At their core, these models utilize the Transformer architecture, which allows for parallel processing of input data. This mechanism, known as "self-attention," enables the model to weigh the importance of different words in a sentence relative to one another, regardless of their distance.
+                        </p>
+<p class="mb-6 leading-relaxed">
+                            Unlike previous recurrent neural networks (RNNs) that processed data sequentially, Transformers can ingest entire documents simultaneously. This capability significantly reduces training time and improves the model's ability to understand context over long passages of text.
+                        </p>
+<h3 class="text-white text-xl font-bold mt-8 mb-4">Implications for Software Development</h3>
+<p class="mb-6 leading-relaxed">
+                            The integration of LLMs into development workflows creates a new paradigm often referred to as "Software 2.0". In this model, the programmer's role shifts from writing explicit logic to curating datasets and defining optimization goals.
+                        </p>
+<ul class="list-disc pl-5 space-y-2 mb-6 marker:text-primary">
+<li>Code generation and autocompletion</li>
+<li>Automated documentation and testing</li>
+<li>Legacy code translation and refactoring</li>
+</ul>
+</article>
+</div>
+</div>
+<!-- Vertical Divider -->
+<div class="w-px bg-[#27272a] shrink-0 z-10"></div>
+<!-- RIGHT PANE: Interactive Transcript -->
+<div class="flex-1 overflow-y-auto bg-[#101012] relative flex flex-col">
+<!-- Sticky Header for Transcript Pane -->
+<div class="sticky top-0 bg-[#101012]/95 backdrop-blur z-10 border-b border-[#27272a] px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">subtitles</span>
+<h3 class="text-sm font-bold text-white tracking-wide">Transcript</h3>
+</div>
+<Button variant="outline" size="sm" className="h-8 px-3 bg-[#27272a] hover:bg-primary/20 hover:text-primary text-white gap-2 text-xs font-medium transition-colors border border-white/5 border-dashed border-none">
+<span class="material-symbols-outlined text-[16px]">sync_lock</span>
+<span>Auto-scroll</span>
+</Button>
+</div>
+<!-- Transcript Content -->
+<div class="flex-1 p-6 md:p-8 space-y-8">
+<!-- Segment 1 -->
+<div class="group">
+<div class="flex items-baseline gap-3 mb-2">
+<span class="text-xs font-mono text-[#52525b]">03:45</span>
+<span class="text-xs font-bold text-[#a1a1aa]">Speaker A</span>
+</div>
+<p class="text-lg leading-relaxed text-[#52525b] transition-colors duration-300">
+                            When we look back at the history of computing, there are few moments that define a distinct "before" and "after". The invention of the transistor, the internet, the smartphone.
+                        </p>
+</div>
+<!-- Segment 2 (Active) -->
+<div class="group">
+<div class="flex items-baseline gap-3 mb-2">
+<span class="text-xs font-mono text-primary font-bold">04:12</span>
+<span class="text-xs font-bold text-white">Speaker A</span>
+</div>
+<p class="text-lg leading-relaxed text-[#71717a]">
+<span class="hover:text-white cursor-pointer transition-colors">Large</span>
+<span class="hover:text-white cursor-pointer transition-colors">language</span>
+<span class="hover:text-white cursor-pointer transition-colors">models</span>
+<span class="hover:text-white cursor-pointer transition-colors">represent</span>
+<span class="bg-primary text-white px-1 rounded mx-[-4px] shadow-lg shadow-primary/20 font-medium">a</span>
+<span class="text-white font-medium">significant</span>
+<span class="text-white font-medium">shift</span>
+<span class="text-[#52525b]">in</span>
+<span class="text-[#52525b]">artificial</span>
+<span class="text-[#52525b]">intelligence</span>
+<span class="text-[#52525b]">capabilities.</span>
+<span class="text-[#52525b]">By</span>
+<span class="text-[#52525b]">processing</span>
+<span class="text-[#52525b]">vast</span>
+<span class="text-[#52525b]">amounts</span>
+<span class="text-[#52525b]">of</span>
+<span class="text-[#52525b]">text</span>
+<span class="text-[#52525b]">data,</span>
+<span class="text-[#52525b]">these</span>
+<span class="text-[#52525b]">models</span>
+<span class="text-[#52525b]">learn</span>
+<span class="text-[#52525b]">to</span>
+<span class="text-[#52525b]">predict</span>
+<span class="text-[#52525b]">and</span>
+<span class="text-[#52525b]">generate...</span>
+</p>
+</div>
+<!-- Segment 3 -->
+<div class="group">
+<div class="flex items-baseline gap-3 mb-2">
+<span class="text-xs font-mono text-[#52525b]">04:28</span>
+<span class="text-xs font-bold text-[#52525b]">Speaker B</span>
+</div>
+<p class="text-lg leading-relaxed text-[#52525b] hover:text-[#71717a] transition-colors cursor-pointer">
+                            Right, and it's not just about generating text that sounds human. It's about the underlying architecture that enables this contextual understanding over long sequences.
+                        </p>
+</div>
+<!-- Segment 4 -->
+<div class="group">
+<div class="flex items-baseline gap-3 mb-2">
+<span class="text-xs font-mono text-[#52525b]">04:40</span>
+<span class="text-xs font-bold text-[#52525b]">Speaker A</span>
+</div>
+<p class="text-lg leading-relaxed text-[#52525b] hover:text-[#71717a] transition-colors cursor-pointer">
+                            Exactly. The Transformer architecture changed everything. Before that, we were constrained by sequential processing. Now, we can look at the whole picture at once.
+                        </p>
+</div>
+<!-- Segment 5 -->
+<div class="group">
+<div class="flex items-baseline gap-3 mb-2">
+<span class="text-xs font-mono text-[#52525b]">05:01</span>
+<span class="text-xs font-bold text-[#52525b]">Speaker B</span>
+</div>
+<p class="text-lg leading-relaxed text-[#52525b] hover:text-[#71717a] transition-colors cursor-pointer">
+                            Which brings us to the concept of "Software 2.0". Can you elaborate on what that means for the average developer watching this?
+                        </p>
+</div>
+</div>
+<!-- Bottom fade for transcript -->
+<div class="sticky bottom-0 h-12 bg-gradient-to-t from-[#101012] to-transparent pointer-events-none"></div>
+</div>
+</div>
+</main>
+</Layout>

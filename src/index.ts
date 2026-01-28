@@ -155,6 +155,11 @@ app.get("/podcast.xml", async (c) => {
 });
 
 /**
+ * Fallback to serve static assets (Astro frontend) for any unmatched routes.
+ */
+app.get("/*", (c) => c.env.ASSETS.fetch(c.req.raw));
+
+/**
  * Cloudflare Worker entrypoints for HTTP, scheduled, and queue triggers.
  */
 export default {
