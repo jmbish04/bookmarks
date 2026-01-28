@@ -56,7 +56,7 @@
     "crons": ["*/30 * * * *"]
   },
   "vars": {
-    "APP_URL": "https://replace-with-your-domain.com",
-    "PODCAST_BASE_URL": "https://replace-with-your-domain.com"
+    "APP_URL": "https://bookmarks.hacolby.workers.dev",
+    "PODCAST_BASE_URL": "https://bookmarks.hacolby.workers.dev"
   }
-}
+}	
