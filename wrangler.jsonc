@@ -5,6 +5,15 @@
 	"upload_source_maps": true,
 	"workers_dev": true,
 	"preview_urls": true,
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false
+    }
+  },
 	"assets": {
 		"directory": "./frontend/dist",
 		"binding": "ASSETS"
