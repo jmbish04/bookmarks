@@ -11,6 +11,7 @@
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:build": "pnpm --filter frontend build",
     "build": "pnpm frontend:build",
+    "deploy": "pnpm build && npx wrangler versions upload",
     "migrate:remote": "wrangler d1 migrations apply DB --remote"
   },
   "dependencies": {
