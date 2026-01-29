@@ -14,7 +14,7 @@ const app = new OpenAPIHono<{ Bindings: Env }>();
  */
 const listRoute = createRoute({
   method: "get",
-  path: "/",
+  path: "/bookmarks",
   operationId: "listBookmarks",
   summary: "List bookmarks from Raindrop (Enriched with D1)",
   request: {
@@ -62,7 +62,7 @@ app.openapi(listRoute, async (c) => {
  */
 const submitRoute = createRoute({
   method: "post",
-  path: "/",
+  path: "/bookmarks",
   operationId: "submitBookmarks",
   summary: "Ingest bookmarks (single or batch)",
   request: {
@@ -116,7 +116,7 @@ app.openapi(submitRoute, async (c) => {
  */
 const syncRoute = createRoute({
   method: "get",
-  path: "/sync",
+  path: "/bookmarks/sync",
   operationId: "syncBookmarks",
   summary: "Trigger manual sync from Raindrop",
   responses: {
