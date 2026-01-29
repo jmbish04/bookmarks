@@ -29,7 +29,7 @@ app.get("/swagger", swaggerUI({ url: "/openapi.json" }));
 
 // Mount Routes
 app.route("/api", bookmarksEndpoints);
-app.route("/api/logs", logsEndpoints);
+app.route("/api", logsEndpoints);
 app.route("/auth", authRoutes);
 
 // Legacy/Other Routes
