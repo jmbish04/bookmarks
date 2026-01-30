@@ -15,7 +15,7 @@
 		}
 	},
 	"assets": {
-		"directory": "./frontend/dist",
+		"directory": "./dist",
 		"binding": "ASSETS"
 	},
 	"d1_databases": [
