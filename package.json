@@ -6,13 +6,13 @@
   "scripts": {
     "lint": "pnpm run type-check",
     "test": "echo \"No tests specified\"",
-    "generate-types": "wrangler types",
+    "types": "wrangler types",
     "type-check": "pnpm run generate-types && tsc --noEmit",
     "drizzle:generate": "drizzle-kit generate",
     "drizzle:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:build": "pnpm --filter frontend build",
-    "build": "pnpm run type-check && pnpm --filter frontend build",
+    "build": "pnpm run types && pnpm run type-check && pnpm --filter frontend build",
     "deploy": "pnpm run drizzle:migrate:remote && pnpm run build && wrangler deploy",
     "migrate:remote": "wrangler d1 migrations apply DB --remote"
   },
