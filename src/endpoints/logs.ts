@@ -20,7 +20,7 @@ const LogListResponseSchema = z.object({
 
 const listLogsRoute = createRoute({
   method: "get",
-  path: "/",
+  path: "/logs",
   operationId: "listLogs",
   summary: "List system logs",
   responses: {

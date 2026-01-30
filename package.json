@@ -12,7 +12,7 @@
     "drizzle:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "frontend:dev": "pnpm --filter frontend dev",
     "frontend:build": "pnpm --filter frontend build",
-    "build": "pnpm run type-check && pnpm run frontend:build",
+    "build": "pnpm run generate-types && pnpm run type-check && pnpm --filter frontend build",
     "deploy": "pnpm run drizzle:migrate:remote && pnpm run build && wrangler deploy",
     "migrate:remote": "wrangler d1 migrations apply DB --remote"
   },
