@@ -5,15 +5,15 @@
 	"upload_source_maps": true,
 	"workers_dev": true,
 	"preview_urls": true,
-  "observability": {
-    "logs": {
-      "enabled": true,
-      "invocation_logs": true
-    },
-    "traces": {
-      "enabled": false
-    }
-  },
+	"observability": {
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true
+		},
+		"traces": {
+			"enabled": false
+		}
+	},
 	"assets": {
 		"directory": "./frontend/dist",
 		"binding": "ASSETS"
@@ -30,6 +30,13 @@
 		{
 			"binding": "HTML_CACHE",
 			"id": "cc675b446dd74cd8bd71d09364387257",
+			"remote": true
+		}
+	],
+	"r2_buckets": [
+		{
+			"binding": "PODCAST_BUCKET",
+			"bucket_name": "bookmarks-podcasts",
 			"remote": true
 		}
 	],
@@ -70,12 +77,5 @@
 		"APP_URL": "https://bookmarks.hacolby.workers.dev",
 		"PODCAST_BASE_URL": "https://bookmarks.hacolby.workers.dev",
 		"AI_MODEL_NAME": "gpt-4.1-nano"
-	},
-	"r2_buckets": [
-		{
-			"bucket_name": "bookmarks-podcasts",
-			"binding": "PODCAST_BUCKET",
-			"remote": true
-		}
-	]
+	}
 }

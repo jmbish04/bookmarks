@@ -1,0 +1,279 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+---
+
+<Layout title="Daily Sync - Article Detail" bodyClass="bg-zinc-50 dark:bg-zinc-950 font-display text-zinc-900 dark:text-zinc-50 overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation (Background Layer) -->
+<header class="flex h-14 items-center justify-between border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 shrink-0 relative z-0">
+<div class="flex items-center gap-2 font-bold text-lg">
+<span class="material-symbols-outlined text-zinc-900 dark:text-white">sync_alt</span>
+<span>Daily Sync</span>
+</div>
+<div class="flex items-center gap-4">
+<Button variant="ghost" className="text-sm font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100">Feedback</Button>
+<div class="h-8 w-8 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden" data-alt="User avatar profile picture">
+<img alt="Profile" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzjaaiSkoP_uq17L5qtLZKOsllMGhc3m9UxNXtggjvYqJMiVafSN0WnVE6FxMfWflTYFzbSpq1Mb46EziCKJC2YGTag8HXcP73SHwADpj-mPULYVVtUSQoxF39NzcH18YnZ2nXiHuHkm3sebjYzVxKCrJ2pjo3fE5ZgDmlLyU1zuN8jBvOmTyH5Qwz-gLRdssGeWSKz1EQbhUT8VOXudGry-GrH6k9j1624Op9lI5jRKY4tT6p4Qr9f6NO42ScryOyu6kTMWAc-c4"/>
+</div>
+</div>
+</header>
+<!-- Main Layout Area -->
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Sidebar (Background Layer) -->
+<aside class="w-64 border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 hidden md:flex flex-col p-4 gap-4 shrink-0 relative z-0">
+<nav class="flex flex-col gap-1">
+<Button variant="secondary" className="justify-start gap-3 w-full" asChild>
+<a href="/">
+<span class="material-symbols-outlined text-[20px]">home</span>
+                    Home
+</a>
+</Button>
+<Button variant="ghost" className="justify-start gap-3 w-full text-zinc-500" asChild>
+<a href="#">
+<span class="material-symbols-outlined text-[20px]">play_circle</span>
+                    Playlist
+</a>
+</Button>
+<Button variant="ghost" className="justify-start gap-3 w-full text-zinc-500" asChild>
+<a href="#">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+                    Bookmarks
+</a>
+</Button>
+<Button variant="ghost" className="justify-start gap-3 w-full text-zinc-500" asChild>
+<a href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                    Settings
+</a>
+</Button>
+</nav>
+<div class="mt-auto">
+<div class="p-4 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+<p class="text-xs font-semibold uppercase text-zinc-500 mb-2">Storage</p>
+<div class="h-2 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+<div class="h-full bg-zinc-900 dark:bg-white w-3/4 rounded-full"></div>
+</div>
+<p class="text-xs text-zinc-500 mt-2">75% used</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Feed (Background Layer) -->
+<main class="flex-1 bg-white dark:bg-zinc-950 p-6 overflow-y-auto relative z-0">
+<div class="max-w-4xl mx-auto flex flex-col gap-6">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-2xl font-bold tracking-tight">Your Feed</h2>
+<div class="flex gap-2">
+<Button variant="ghost" size="icon" className="text-zinc-500">
+<span class="material-symbols-outlined">filter_list</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-500">
+<span class="material-symbols-outlined">grid_view</span>
+</Button>
+</div>
+</div>
+<!-- Grid of cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-40 pointer-events-none select-none grayscale-[0.5]">
+<!-- Card 1 -->
+<Card className="flex flex-col gap-3 p-4 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+<div class="aspect-video w-full rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Computer chip close up showing intricate circuits" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAD4KOdcr9kvpeEs0uFsDW1GN65IN8Ki1SCHZTfPYazyZGLqv7s7xMYAwa5bOzJ6eqYXgCwImDFShxSB3gr_Ew22yfkOgnfxBpqHKBb0jD0f8wks7-Q3_6Hvg6ycMOsw5IeJNzr1wnJNvo-SL72lZ_5YaZcL6Om1r9XArNODFYhrPvFwl7j8yQEfY4useP1LsmVa_w1-9UbpwzPIyIfx1yHow4U3TrK6qYoj9W83uHL7SYj3b-7mbYU4knb7uNWldd0Y6pRCStyMUg");'></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium text-zinc-500">The Verge</span>
+<span class="text-xs text-zinc-500">2h ago</span>
+</div>
+<h3 class="font-bold leading-snug">SpaceX Launches New Starlink Satellites</h3>
+<div class="flex gap-2 mt-1">
+<Badge variant="secondary" className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">Space</Badge>
+<Badge variant="secondary" className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">Tech</Badge>
+</div>
+</div>
+</Card>
+<!-- Card 2 (Active State Simulated) -->
+<Card className="flex flex-col gap-3 p-4 shadow-md ring-1 ring-zinc-200 dark:ring-zinc-700 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+<div class="aspect-video w-full rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Abstract visualization of artificial intelligence neural network" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuChB2MaKPonl7Lx1JnCRA6dje2FCTPbtMqNHeM8mkWDU1TBe6E8GtIbRzbSz3Yrj6cYrh8JXjC0TmZ7KSOz7v2mpVTZD86Na8GXFjpV1mBdGF9OO9-c_KzDsgl-8D2JY0FNwMZMEVXd8Bs8qppsMAEtHgQpAcXvo5Ri9woz17nuLagygXLINsxFaAuSKjOnJ7KtNlaWlyOFyZ9HFwb3OJCxENxMKwA088siIPpLZXeKMLQZ5YhSE4v2enn30ZkKvuMudGZkk6LyD3E");'></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium text-zinc-500">TechCrunch</span>
+<span class="text-xs text-zinc-500">5 min read</span>
+</div>
+<h3 class="font-bold leading-snug">The Future of AI in Personal News Curation</h3>
+<div class="flex gap-2 mt-1">
+<Badge variant="secondary" className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">AI</Badge>
+<Badge variant="secondary" className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">Productivity</Badge>
+</div>
+</div>
+</Card>
+<!-- Card 3 -->
+<Card className="flex flex-col gap-3 p-4 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+<div class="aspect-video w-full rounded-lg bg-zinc-100 dark:bg-zinc-800 overflow-hidden relative">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Smartphone displaying social media apps" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC3YWlXXnlQkCPz6b-sWLPsZtlmwQDSJSRIA577K4UGbo6f01cpOuzN5LhiuwsmRjLUAG8tsv-O5zOCRo3giQhFnsAB2S8ztjj51VSQr8z_yJdnETIZiEwlq1Bb5wx1T6BNrK9jjRb2j1rM3I4-H9Mf8CPY18KvW5-e09ZY_oHyPeglpolQdAviV06QAJwyRZ_DcZNo9n2VwgG0teWK48tlVoRyW95kFwvGgo2kTsvFcs-n5cALcClv-rKYuOj9ZeIaKkSFQWvwtUU");'></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="text-xs font-medium text-zinc-500">Wired</span>
+<span class="text-xs text-zinc-500">4h ago</span>
+</div>
+<h3 class="font-bold leading-snug">Social Media Algorithms Explained</h3>
+<div class="flex gap-2 mt-1">
+<Badge variant="secondary" className="rounded-full bg-zinc-100 dark:bg-zinc-800 text-[10px] font-medium text-zinc-600 dark:text-zinc-400">Social</Badge>
+</div>
+</div>
+</Card>
+</div>
+</div>
+</main>
+<!-- Overlay Backdrop -->
+<div class="absolute inset-0 z-40 bg-zinc-950/60 backdrop-blur-sm transition-opacity duration-300"></div>
+<!-- Right Side Sheet (Article Detail) -->
+<div class="absolute top-0 right-0 bottom-20 z-50 w-full md:w-[600px] lg:w-[700px] bg-white dark:bg-zinc-900 border-l border-zinc-200 dark:border-zinc-800 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out transform translate-x-0">
+<!-- Sheet Header -->
+<div class="flex items-center justify-between px-6 py-4 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
+<div class="flex items-center gap-2">
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" asChild>
+<a href="/">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</a>
+</Button>
+<div class="h-4 w-[1px] bg-zinc-200 dark:bg-zinc-700 mx-1"></div>
+<div class="flex items-center gap-2 text-xs text-zinc-500 font-medium">
+<img alt="Source Favicon" class="w-4 h-4 grayscale opacity-70" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwvADGRmJpWv42JDh861aFDsGOyEdrhVJih8djFdyRwAA78KblkKpAT1RGfAd4YCH7IGTAoqksl3LZsDKsnJHbidDqbXSnTtjGrrSNo9UKy_zRY8D7tSCc-R8z2mzY2EMJb4NhU2zFiKTkUUJQV6rcHLVPRdpSjHTjSeHEkMEj_Kif_KdAK8lYl_ooUfoLQZ6D62Xy2jh1gLwaLZCA9n8w4jZnqtJOs1WIgco4LmD92SgPzah0kcthmqjaTNUktl-kt8Yr13oM9DE"/>
+<span>TechCrunch</span>
+<span>•</span>
+<span>5 min read</span>
+</div>
+</div>
+<div class="flex gap-2">
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px] font-light">share</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px] font-light">bookmark</span>
+</Button>
+</div>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 overflow-y-auto px-8 py-8 custom-scrollbar">
+<!-- Action Bar -->
+<div class="flex justify-between items-center mb-8">
+<Button className="flex items-center justify-center gap-2 px-4 h-10 bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 text-sm font-bold rounded-md shadow-sm hover:opacity-90 transition-opacity w-full sm:w-auto">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+<span>Smart Summarize</span>
+</Button>
+<div class="text-xs text-zinc-400 hidden sm:block">
+                        Saved from Raindrop.io
+                    </div>
+</div>
+<!-- Article Body -->
+<article class="prose prose-zinc dark:prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-img:rounded-xl">
+<h1 class="text-3xl md:text-4xl mb-4 leading-tight">The Future of AI in Personal News Curation</h1>
+<div class="not-prose mb-8 w-full aspect-[2/1] rounded-xl overflow-hidden relative bg-zinc-100 dark:bg-zinc-800">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Abstract digital network visualization with blue and purple gradients" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB5bsWcFcR-HVMhwFsbDSzw_XY3tQdCo_ddWqxpktgtmphhOAFyEw5Egwlz5Kep7UmlIKAiuePuGDIellvvJM4ZaUJRb7H2hFh7MNK3WJHQlu4Kw2K_Yp0pR4o1V9Xza4iZrb_u82daDA9zp0oILSrYiJtlFRffbVqAWpaV3pFs4GHccQI32d_55IuMvTDQB2gSG_ojvVL_gkHOI0OoqFOZ4hd8DjET2YMiej5Iw0saw5ONUXxW3ywNMbByM7O9ruGeMMod2GOeRrY");'></div>
+</div>
+<p class="lead text-lg text-zinc-600 dark:text-zinc-300">
+                        As the volume of digital content explodes, traditional RSS feeds and social media timelines are becoming increasingly noisy. A new wave of AI-driven tools promises to restore sanity to our daily reading habits.
+                    </p>
+<p>
+                        The concept of "personal news curation" isn't new. We've had tools like Flipboard, Feedly, and Pocket for over a decade. However, the fundamental mechanism has remained the same: you subscribe to sources, and you receive a linear stream of everything they publish.
+                    </p>
+<h3>The Problem with Linear Feeds</h3>
+<p>
+                        The issue with the linear model is signal-to-noise ratio. Even your favorite tech blog publishes press releases you don't care about. Even your favorite columnist sometimes writes about topics that don't interest you.
+                    </p>
+<blockquote>
+                        "We are drowning in information but starved for knowledge." <br/>
+<span class="text-base font-normal not-italic text-zinc-500">– John Naisbitt</span>
+</blockquote>
+<p>
+                        AI curation engines, unlike simple keyword filters, understand semantic context. They don't just look for the word "Apple"; they understand if an article is a financial report, a product rumor, or a deep-dive review. This allows for a level of filtering that feels almost magical.
+                    </p>
+<h3>From Reading to Listening</h3>
+<p>
+                        Another significant shift is the multimodal nature of consumption. Tools like <strong>Daily Sync</strong> are pioneering the conversion of text-based bookmarks into synthesized audio podcasts. This isn't just text-to-speech; it's about summarization and restructuring content for the ear.
+                    </p>
+<p>
+                        Imagine a 2000-word essay being condensed into a 3-minute audio segment that captures the core arguments without the fluff. This is the promise of the next generation of read-it-later apps.
+                    </p>
+<div class="bg-zinc-100 dark:bg-zinc-800/50 p-4 rounded-lg my-6 border border-zinc-200 dark:border-zinc-700 not-prose">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-zinc-500">info</span>
+<div>
+<h4 class="font-bold text-sm text-zinc-900 dark:text-white mb-1">Key Takeaway</h4>
+<p class="text-sm text-zinc-600 dark:text-zinc-400">AI isn't replacing the curator; it's becoming the assistant curator, handling the initial sift so humans can focus on deep reading.</p>
+</div>
+</div>
+</div>
+<p>
+                        As we move forward, the interface for news will likely become less of a "feed" and more of a "briefing"—a finite, curated package generated specifically for you, once or twice a day.
+                    </p>
+</article>
+<!-- Bottom spacing to ensure content isn't hidden behind player if strict sizing fails -->
+<div class="h-24"></div>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Player Bar -->
+<div class="h-20 bg-white dark:bg-zinc-950 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-6 shrink-0 relative z-[60]">
+<!-- Track Info -->
+<div class="flex items-center gap-4 w-1/4 min-w-[200px]">
+<div class="h-12 w-12 rounded bg-zinc-100 dark:bg-zinc-800 overflow-hidden relative flex-shrink-0">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="Small thumbnail of the article hero image" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVZLoAn94Un_9PLTrjZ8XVhWNByJIp9Hw_Z9q4_jr_9Ww48x4_W1JI5idGHF47C5gdErc993FU_tuo80dHWTT2i3gNoLi1QvNIjRLeftO7-_CNozXOQUQpJS7Hj2m2PfS1hvSQmKHFLArCNF5QWBwsIHRP4ZZPWtCJ46QN77EZvdoQNcT4SIhpxsBbMke-5XeC1HIDXF83ZpXF7_UV-15sJpAMt66yH9wrBKMbcCj7_PM5Ai97-qY_d-PXt9iR5zHNqpvpcFPfIOg");'></div>
+</div>
+<div class="flex flex-col overflow-hidden">
+<h4 class="text-sm font-semibold truncate text-zinc-900 dark:text-white">The Future of AI in Personal News...</h4>
+<p class="text-xs text-zinc-500 truncate">TechCrunch • Daily Briefing</p>
+</div>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white ml-2">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</Button>
+</div>
+<!-- Player Controls -->
+<div class="flex flex-col items-center gap-1 flex-1 max-w-xl px-4">
+<div class="flex items-center gap-6">
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[24px]">shuffle</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-900 dark:text-white hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[28px]">skip_previous</span>
+</Button>
+<Button size="icon" className="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 shadow-md hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[28px] ml-0.5 fill-current">play_arrow</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-900 dark:text-white hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[28px]">skip_next</span>
+</Button>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[24px]">repeat</span>
+</Button>
+</div>
+<div class="w-full flex items-center gap-3 text-xs text-zinc-500 font-medium">
+<span>1:24</span>
+<div class="h-1 flex-1 bg-zinc-200 dark:bg-zinc-800 rounded-full cursor-pointer group relative">
+<div class="absolute h-full bg-zinc-900 dark:bg-white w-1/3 rounded-full group-hover:bg-zinc-700 dark:group-hover:bg-zinc-200"></div>
+<div class="absolute h-3 w-3 top-1/2 -translate-y-1/2 left-1/3 bg-white dark:bg-zinc-200 rounded-full shadow border border-zinc-200 dark:border-zinc-800 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<span>5:12</span>
+</div>
+</div>
+<!-- Volume/Extras -->
+<div class="flex items-center justify-end gap-3 w-1/4 min-w-[150px]">
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
+<span class="material-symbols-outlined text-[20px]">queue_music</span>
+</Button>
+<div class="flex items-center gap-2 group">
+<span class="material-symbols-outlined text-[20px] text-zinc-400">volume_up</span>
+<div class="w-20 h-1 bg-zinc-200 dark:bg-zinc-800 rounded-full cursor-pointer">
+<div class="h-full bg-zinc-500 dark:bg-zinc-400 w-2/3 rounded-full"></div>
+</div>
+</div>
+<Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white ml-2">
+<span class="material-symbols-outlined text-[20px]">open_in_full</span>
+</Button>
+</div>
+</div>
+</Layout>
