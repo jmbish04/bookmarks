@@ -2,6 +2,7 @@
 	"name": "bookmarks",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-01-26",
+	"compatibility_flags": ["nodejs_compat"],
 	"upload_source_maps": true,
 	"workers_dev": true,
 	"preview_urls": true,
