@@ -427,4 +427,100 @@ describe('HybridService', () => {
       expect(result.items[0].domain).toBe('sub.example.com');
     });
   });
+  
+  describe('URL Normalization (normalizeUrl)', () => {
+    // Testing normalizeUrl indirectly through addBookmarks
+    
+    it('should handle invalid URLs gracefully', async () => {
+      const mockDb = createChainedMockDb({ existingUrls: [] });
+      (getDb as Mock).mockReturnValue(mockDb);
+      service = new HybridService(mockEnv);
+      
+      // Invalid URL should be passed through as-is
+      const invalidUrl = 'not-a-valid-url';
+      
+      // Act
+      const result = await service.addBookmarks([invalidUrl]);
+      
+      // Assert: Should still attempt to process (DB will fail but that's OK)
+      expect(result.success).toBe(true);
+    });
+    
+    it('should handle URLs with query parameters', async () => {
+      const mockDb = createChainedMockDb({ existingUrls: [] });
+      (getDb as Mock).mockReturnValue(mockDb);
+      service = new HybridService(mockEnv);
+      
+      const urls = [
+        'https://example.com/page?param=1',
+        'https://example.com/page?param=2', // Different query param
+      ];
+      
+      // Act
+      const result = await service.addBookmarks(urls);
+      
+      // Assert: Different query params = different URLs
+      expect(result.processed).toBe(2);
+    });
+    
+    it('should handle URLs with fragments', async () => {
+      const mockDb = createChainedMockDb({ existingUrls: [] });
+      (getDb as Mock).mockReturnValue(mockDb);
+      service = new HybridService(mockEnv);
+      
+      const urls = [
+        'https://example.com/page#section1',
+        'https://example.com/page#section2', // Different fragment
+      ];
+      
+      // Act
+      const result = await service.addBookmarks(urls);
+      
+      // Assert: Different fragments = different URLs
+      expect(result.processed).toBe(2);
+    });
+    
+    it('should normalize default ports (80 for http, 443 for https)', async () => {
+      const mockDb = createChainedMockDb({ existingUrls: [] });
+      (getDb as Mock).mockReturnValue(mockDb);
+      service = new HybridService(mockEnv);
+      
+      const urls = [
+        'https://example.com:443/page',
+        'https://example.com/page', // Same URL without port
+      ];
+      
+      // Act
+      const result = await service.addBookmarks(urls);
+      
+      // Assert: Default port should be normalized away
+      expect(result.processed).toBe(1);
+    });
+  });
+  
+  describe('Database Error Handling', () => {
+    it('should continue processing when database existence check fails', async () => {
+      // Create a mock that fails on the select query
+      const mockDb: any = {
+        select: vi.fn().mockImplementation(() => ({
+          from: vi.fn().mockImplementation(() => ({
+            where: vi.fn().mockRejectedValue(new Error('Database connection failed')),
+          })),
+        })),
+        insert: vi.fn().mockImplementation(() => ({
+          values: vi.fn().mockResolvedValue({ success: true }),
+        })),
+      };
+      
+      (getDb as Mock).mockReturnValue(mockDb);
+      service = new HybridService(mockEnv);
+      
+      // Act
+      const result = await service.addBookmarks(['https://example.com/test']);
+      
+      // Assert: Should still attempt to process despite DB check failure
+      expect(result.success).toBe(true);
+      expect(result.processed).toBe(1);
+    });
+  });
 });
