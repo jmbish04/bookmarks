@@ -64,11 +64,7 @@ export default {
 				lg: "var(--radius)",
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)",
-<<<<<<< HEAD
                 "xl": "1.5rem",
-=======
-                "xl": "0.75rem",
->>>>>>> main
 			},
 		},
 	},
