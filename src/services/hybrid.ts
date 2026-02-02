@@ -52,20 +52,87 @@ export class HybridService {
     }
 
     /**
+     * Normalize a URL for consistent deduplication.
+     * - Converts to lowercase
+     * - Removes trailing slashes
+     * - Removes default ports (80 for http, 443 for https)
+     */
+    private normalizeUrl(url: string): string {
+        try {
+            const parsed = new URL(url.toLowerCase());
+            // Remove trailing slash from pathname
+            if (parsed.pathname.endsWith('/') && parsed.pathname.length > 1) {
+                parsed.pathname = parsed.pathname.slice(0, -1);
+            }
+            // Remove default ports
+            if ((parsed.protocol === 'http:' && parsed.port === '80') ||
+                (parsed.protocol === 'https:' && parsed.port === '443')) {
+                parsed.port = '';
+            }
+            return parsed.toString();
+        } catch {
+            // If URL parsing fails, return the original
+            return url;
+        }
+    }
+
+    /**
      * Add bookmarks directly to D1 and Queue.
      * Generates a synthetic ID (Date.now()) to bypass Raindrop creation.
      * The actual sync to Raindrop will happen via correct cron/queue processing later
      * (though currently we are just ingesting. true 2-way sync is a future task, 
      * but this meets the requirement of not blocking on Raindrop API).
+     * 
+     * CRITICAL: This method prevents duplicate URL processing which is essential
+     * for billing purposes. URLs are checked against the database before being
+     * queued for processing.
      */
     async addBookmarks(urls: string[], collectionId: number = 0) {
-        // 1. Dedup input
-        const uniqueUrls = [...new Set(urls)];
         const db = getDb(this.env);
-        const processed = [];
+        const processed: Array<{ _id: number; link: string; title: string }> = [];
+        const skipped: string[] = [];
 
-        // 2. Process each URL
+        // 1. Normalize and deduplicate input URLs
+        const normalizedMap = new Map<string, string>(); // normalized -> original
+        for (const url of urls) {
+            const normalized = this.normalizeUrl(url);
+            if (!normalizedMap.has(normalized)) {
+                normalizedMap.set(normalized, url);
+            }
+        }
+        const uniqueUrls = Array.from(normalizedMap.values());
+
+        if (uniqueUrls.length === 0) {
+            return { success: true, processed: 0, skipped: 0, items: [] };
+        }
+
+        // 2. CRITICAL: Check database for existing URLs to prevent duplicate processing
+        // This is essential for billing - a URL should NEVER be processed more than once
+        let existingUrls = new Set<string>();
+        try {
+            const existingRecords = await db.select({ url: bookmarks.url })
+                .from(bookmarks)
+                .where(inArray(bookmarks.url, uniqueUrls));
+            
+            existingUrls = new Set(existingRecords.map(r => r.url));
+            
+            if (existingUrls.size > 0) {
+                await this.logger.info(`Skipping ${existingUrls.size} URLs that already exist in database`);
+            }
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : "Unknown error";
+            await this.logger.warn(`Failed to check for existing URLs: ${msg}`);
+            // Continue - we'll rely on the upsert to handle conflicts
+        }
+
+        // 3. Process only URLs that don't exist in the database
         for (const url of uniqueUrls) {
+            // Skip URLs that already exist
+            if (existingUrls.has(url)) {
+                skipped.push(url);
+                continue;
+            }
+
             // Generate a synthetic ID. 
             // We use Date.now() to ensure uniqueness locally.
             // This ensures we satisfy the primary key constraint without calling an external API.
@@ -105,6 +172,11 @@ export class HybridService {
             }
         }
 
-        return { success: true, processed: processed.length, items: processed };
+        return { 
+            success: true, 
+            processed: processed.length, 
+            skipped: skipped.length,
+            items: processed 
+        };
     }
 }
