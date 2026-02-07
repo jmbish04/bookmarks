@@ -28,17 +28,23 @@ import { Card, CardContent } from '@/components/ui/card';
     <span class="material-symbols-outlined text-[20px]">home</span>
     Home
 </Button>
-<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">library_books</span>
-    <a href="/reader" class="flex-1 text-left">Library</a>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400" asChild>
+    <a href="/reader">
+        <span class="material-symbols-outlined text-[20px]">library_books</span>
+        Library
+    </a>
 </Button>
-<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">headphones</span>
-    <a href="/split" class="flex-1 text-left">Podcasts</a>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400" asChild>
+    <a href="/split">
+        <span class="material-symbols-outlined text-[20px]">headphones</span>
+        Podcasts
+    </a>
 </Button>
-<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">settings</span>
-    <a href="/detail" class="flex-1 text-left">Settings</a>
+<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400" asChild>
+    <a href="/detail">
+        <span class="material-symbols-outlined text-[20px]">settings</span>
+        Settings
+    </a>
 </Button>
 
 <div class="mt-8 px-3 mb-2">
