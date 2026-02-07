@@ -140,4 +140,8 @@ vite.config.ts.timestamp-*
 # Astro build output
 frontend/dist/
 .astro/
-dist/
+
+frontend/.astro/
+
+# Worker build output
+dist_worker/

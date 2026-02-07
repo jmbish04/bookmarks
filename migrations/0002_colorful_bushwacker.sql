@@ -1,1 +1,0 @@
-ALTER TABLE `bookmarks` ADD `cover_image` text;

@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
 ---
 
 <Layout title="Daily Sync Dashboard" bodyClass="bg-background-light dark:bg-background-dark text-zinc-950 dark:text-zinc-50 font-display overflow-hidden h-screen flex flex-col">
@@ -15,7 +14,7 @@ import { Separator } from '@/components/ui/separator';
 <div class="h-16 flex items-center px-6 border-b border-zinc-200 dark:border-zinc-800/50">
 <div class="flex items-center gap-2">
 <div class="size-6 bg-zinc-950 dark:bg-white rounded-md flex items-center justify-center">
-<span class="material-symbols-outlined text-white dark:text-zinc-950 text-base">sync</span>
+<span class="material-symbols-outlined text-white dark:text-zinc-950 text-base" data-icon="sync">sync</span>
 </div>
 <span class="text-sm font-bold tracking-tight">Daily Sync</span>
 </div>
@@ -26,19 +25,19 @@ import { Separator } from '@/components/ui/separator';
 <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Menu</p>
 </div>
 <Button variant="secondary" className="w-full justify-start gap-3 px-3">
-    <span class="material-symbols-outlined text-[20px]">home</span>
+    <span class="material-symbols-outlined text-[20px]" data-icon="home">home</span>
     Home
 </Button>
 <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">library_books</span>
+    <span class="material-symbols-outlined text-[20px]" data-icon="library_books">library_books</span>
     <a href="/reader" class="flex-1 text-left">Library</a>
 </Button>
 <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">headphones</span>
+    <span class="material-symbols-outlined text-[20px]" data-icon="headphones">headphones</span>
     <a href="/split" class="flex-1 text-left">Podcasts</a>
 </Button>
 <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">settings</span>
+    <span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
     <a href="/detail" class="flex-1 text-left">Settings</a>
 </Button>
 
@@ -46,11 +45,11 @@ import { Separator } from '@/components/ui/separator';
 <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Collections</p>
 </div>
 <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">bookmark</span>
+    <span class="material-symbols-outlined text-[20px]" data-icon="bookmark">bookmark</span>
     Favorites
 </Button>
 <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">history</span>
+    <span class="material-symbols-outlined text-[20px]" data-icon="history">history</span>
     Recently Played
 </Button>
 </nav>
@@ -85,7 +84,7 @@ import { Separator } from '@/components/ui/separator';
 </div>
 <div class="flex items-center gap-2">
 <Button variant="outline" className="gap-2 bg-white dark:bg-zinc-900">
-<span class="material-symbols-outlined text-[18px]">refresh</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
                             Refresh
 </Button>
 </div>
@@ -115,7 +114,7 @@ import { Separator } from '@/components/ui/separator';
             <div class="relative aspect-video w-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden">
                 <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={`background-image: url('${card.img}')`}></div>
                 <div class="absolute inset-0 m-auto size-12 flex items-center justify-center rounded-full bg-white text-black opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                    <span class="material-symbols-outlined">play_arrow</span>
+                    <span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
                 </div>
             </div>
         </a>
@@ -151,32 +150,32 @@ import { Separator } from '@/components/ui/separator';
 <div class="flex-1 flex items-center justify-between px-6">
 <!-- Track Info -->
 <div class="flex items-center gap-4 w-1/3 min-w-0">
-<div class="size-12 rounded-md bg-zinc-200 dark:bg-zinc-800 bg-cover bg-center shrink-0" role="img" aria-label="Current track thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQaRSmzoJmThTkvUpDxsXQy5GBtf3CUioX_wYSo_4oHn1DeQYj3bexJMnEiW072I4trKNL2SyMcs1uWF_unybYfNfhxlWuK6ZoSZaMX8Ui2lHRrkJIdd2VWzyNauqm4KGzeqzbphq49MhJYmoan39RFq-_RiQbr7ndGHhmPQbDOPyHcPuaaryB8R4lWwqIoLUIJV5maHdU0H1gN0yV7M3ig_rN6Sn2vOB-gzxkMKuOLBhQ_3-nSvNdfYYrkebu66xSWzzEUFJkcvw')"></div>
+<div class="size-12 rounded-md bg-zinc-200 dark:bg-zinc-800 bg-cover bg-center shrink-0" data-alt="Current track thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQaRSmzoJmThTkvUpDxsXQy5GBtf3CUioX_wYSo_4oHn1DeQYj3bexJMnEiW072I4trKNL2SyMcs1uWF_unybYfNfhxlWuK6ZoSZaMX8Ui2lHRrkJIdd2VWzyNauqm4KGzeqzbphq49MhJYmoan39RFq-_RiQbr7ndGHhmPQbDOPyHcPuaaryB8R4lWwqIoLUIJV5maHdU0H1gN0yV7M3ig_rN6Sn2vOB-gzxkMKuOLBhQ_3-nSvNdfYYrkebu66xSWzzEUFJkcvw')"></div>
 <div class="flex flex-col min-w-0 overflow-hidden">
 <span class="text-sm font-bold text-zinc-900 dark:text-white truncate">Daily Summary: Oct 24</span>
 <span class="text-xs text-zinc-500 dark:text-zinc-400 truncate">Daily Sync AI</span>
 </div>
 <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white ml-2">
-<span class="material-symbols-outlined text-[20px]">favorite</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="favorite">favorite</span>
 </Button>
 </div>
 <!-- Controls -->
 <div class="flex flex-col items-center justify-center gap-1 w-1/3">
 <div class="flex items-center gap-4">
 <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[24px]">shuffle</span>
+<span class="material-symbols-outlined text-[24px]" data-icon="shuffle">shuffle</span>
 </Button>
 <Button variant="ghost" size="icon" className="text-zinc-900 dark:text-white hover:scale-105 transition-transform">
-<span class="material-symbols-outlined text-[28px]">skip_previous</span>
+<span class="material-symbols-outlined text-[28px]" data-icon="skip_previous">skip_previous</span>
 </Button>
 <Button size="icon" className="flex items-center justify-center size-10 rounded-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 hover:scale-105 transition-transform shadow-md">
-<span class="material-symbols-outlined text-[24px] fill-current">pause</span>
+<span class="material-symbols-outlined text-[24px] fill-current" data-icon="pause">pause</span>
 </Button>
 <Button variant="ghost" size="icon" className="text-zinc-900 dark:text-white hover:scale-105 transition-transform">
-<span class="material-symbols-outlined text-[28px]">skip_next</span>
+<span class="material-symbols-outlined text-[28px]" data-icon="skip_next">skip_next</span>
 </Button>
 <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-<span class="material-symbols-outlined text-[24px]">repeat</span>
+<span class="material-symbols-outlined text-[24px]" data-icon="repeat">repeat</span>
 </Button>
 </div>
 <div class="flex items-center gap-2 w-full max-w-[300px]">
@@ -193,10 +192,10 @@ import { Separator } from '@/components/ui/separator';
 <span class="text-xs font-bold">1.5x</span>
 </Button>
 <Button variant="ghost" size="icon" className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
-<span class="material-symbols-outlined text-[20px]">queue_music</span>
+<span class="material-symbols-outlined text-[20px]" data-icon="queue_music">queue_music</span>
 </Button>
 <div class="flex items-center gap-2 group/volume w-24">
-<span class="material-symbols-outlined text-[20px] text-zinc-500 dark:text-zinc-400">volume_up</span>
+<span class="material-symbols-outlined text-[20px] text-zinc-500 dark:text-zinc-400" data-icon="volume_up">volume_up</span>
 <div class="h-1 flex-1 rounded-full bg-zinc-200 dark:bg-zinc-800 relative cursor-pointer">
 <div class="absolute top-0 left-0 h-full w-[70%] bg-zinc-500 dark:bg-zinc-400 group-hover/volume:bg-zinc-900 dark:group-hover/volume:bg-white transition-colors"></div>
 </div>
