@@ -136,8 +136,4 @@ out
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-
-# Astro build output
-frontend/dist/
-.astro/
-dist/
+.dev.vars

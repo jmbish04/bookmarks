@@ -11,6 +11,7 @@ export const bookmarks = sqliteTable("bookmarks", {
   raindropId: integer("raindrop_id").primaryKey(),
   title: text("title"),
   url: text("url").notNull(),
+  coverImage: text("cover_image"),
   byline: text("byline"),
   summary: text("summary"),
   textContent: text("text_content"),
@@ -31,5 +32,14 @@ export const podcastEpisodes = sqliteTable("podcast_episodes", {
   raindropId: integer("raindrop_id").notNull().unique(),
   audioKey: text("audio_key").notNull(),
   script: text("script"),
+  createdAt: text("created_at").default(sql`(datetime('now'))`)
+});
+
+export const systemLogs = sqliteTable("system_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  level: text("level", { enum: ["INFO", "WARN", "ERROR"] }).notNull(),
+  component: text("component").notNull(),
+  message: text("message").notNull(),
+  metadata: text("metadata"), // JSON string
   createdAt: text("created_at").default(sql`(datetime('now'))`)
 });

@@ -1,5 +1,12 @@
 APP_URL=https://replace-with-your-domain.com
 CLOUDFLARE_ACCOUNT_ID=replace-with-account-id
 CLOUDFLARE_BROWSER_RENDER_TOKEN=replace-with-browser-render-token
+CLOUDFLARE_WORKER_EDIT_ADMIN_TOKEN=replace-with-token
+CLOUDFLARE_IMAGES_TOKEN=replace-with-token
 PODCAST_BASE_URL=https://replace-with-your-domain.com
 RAINDROP_TOKEN=replace-with-raindrop-token
+RAINDROP_CLIENT_ID=replace-with-client-id
+RAINDROP_CLIENT_SECRET=replace-with-client-secret
+RAINDROP_COLLECTION_ID=replace-with-collection-id
+WORKER_API_KEY=replace-with-api-key
+OPENAI_API_KEY=replace-with-api-key
