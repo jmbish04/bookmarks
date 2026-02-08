@@ -28,18 +28,18 @@ import { Card, CardContent } from '@/components/ui/card';
     <span class="material-symbols-outlined text-[20px]">home</span>
     Home
 </Button>
-<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">library_books</span>
-    <a href="/reader" class="flex-1 text-left">Library</a>
-</Button>
-<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">headphones</span>
-    <a href="/split" class="flex-1 text-left">Podcasts</a>
-</Button>
-<Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400">
-    <span class="material-symbols-outlined text-[20px]">settings</span>
-    <a href="/detail" class="flex-1 text-left">Settings</a>
-</Button>
+{[
+    { href: '/reader', icon: 'library_books', label: 'Library' },
+    { href: '/split', icon: 'headphones', label: 'Podcasts' },
+    { href: '/detail', icon: 'settings', label: 'Settings' },
+].map(item => (
+    <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400" asChild>
+        <a href={item.href}>
+            <span class="material-symbols-outlined text-[20px]">{item.icon}</span>
+            {item.label}
+        </a>
+    </Button>
+))}
 
 <div class="mt-8 px-3 mb-2">
 <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Collections</p>
