@@ -33,7 +33,7 @@ import { Card, CardContent } from '@/components/ui/card';
     { href: '/split', icon: 'headphones', label: 'Podcasts' },
     { href: '/detail', icon: 'settings', label: 'Settings' },
 ].map(item => (
-    <Button key={item.href} variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400" asChild>
+    <Button variant="ghost" className="w-full justify-start gap-3 px-3 text-zinc-600 dark:text-zinc-400" asChild>
         <a href={item.href}>
             <span class="material-symbols-outlined text-[20px]">{item.icon}</span>
             {item.label}
