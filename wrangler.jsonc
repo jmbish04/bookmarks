@@ -1,81 +1,62 @@
 {
-	"name": "bookmarks",
-	"main": "src/index.ts",
-	"compatibility_date": "2026-01-26",
-	"upload_source_maps": true,
-	"workers_dev": true,
-	"preview_urls": true,
-	"observability": {
-		"logs": {
-			"enabled": true,
-			"invocation_logs": true
-		},
-		"traces": {
-			"enabled": false
-		}
-	},
-	"assets": {
-		"directory": "./dist",
-		"binding": "ASSETS"
-	},
-	"d1_databases": [
-		{
-			"binding": "DB",
-			"database_name": "bookmarks",
-			"database_id": "6a3e8834-c6bc-4e3a-bf67-f24f34791fc0",
-			"migrations_dir": "./migrations"
-		}
-	],
-	"kv_namespaces": [
-		{
-			"binding": "HTML_CACHE",
-			"id": "cc675b446dd74cd8bd71d09364387257",
-			"remote": true
-		}
-	],
-	"r2_buckets": [
-		{
-			"binding": "PODCAST_BUCKET",
-			"bucket_name": "bookmarks-podcasts",
-			"remote": true
-		}
-	],
-	"queues": {
-		"producers": [
-			{
-				"binding": "BOOKMARK_QUEUE",
-				"queue": "bookmarks-processing"
-			}
-		],
-		"consumers": [
-			{
-				"queue": "bookmarks-processing",
-				"max_batch_size": 10,
-				"max_batch_timeout": 30
-			}
-		]
-	},
-	"images": {
-		"binding": "IMAGES"
-	},
-	"ai": {
-		"binding": "AI"
-	},
-	// wrangler vectorize create bookmark-vectors --preset @cf/baai/bge-large-en-v1.5
-	"vectorize": [
-		{
-			"binding": "VECTORIZE",
-			"index_name": "bookmark-vectors"
-		}
-	],
-	"triggers": {
-		"crons": [
-			"*/30 * * * *"
-		]
-	},
-	"vars": {
-		"APP_URL": "https://bookmarks.hacolby.workers.dev",
-		"PODCAST_BASE_URL": "https://bookmarks.hacolby.workers.dev",
-		"AI_MODEL_NAME": "gpt-4.1-nano"
-	}
+  "name": "bookmarks",
+  "main": "src/index.ts",
+  "compatibility_date": "2024-06-01",
+  "assets": {
+    "directory": "./frontend/dist",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bookmarks",
+      "database_id": "REPLACE_WITH_D1_ID",
+      "preview_database_id": "REPLACE_WITH_D1_ID",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "HTML_CACHE",
+      "id": "REPLACE_WITH_KV_ID",
+      "preview_id": "REPLACE_WITH_KV_ID"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "PODCAST_BUCKET",
+      "bucket_name": "podcast-audio"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "BOOKMARK_QUEUE",
+        "queue": "bookmark-processing"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "bookmark-processing",
+        "max_batch_size": 10,
+        "max_batch_timeout": 30
+      }
+    ]
+  },
+  "ai": {
+    "binding": "AI"
+  },
+  "vectorize": [
+    {
+      "binding": "VECTORIZE",
+      "index_name": "bookmark-vectors"
+    }
+  ],
+  "triggers": {
+    "crons": ["*/30 * * * *"]
+  },
+  "vars": {
+    "APP_URL": "https://replace-with-your-domain.com",
+    "PODCAST_BASE_URL": "https://replace-with-your-domain.com"
+  }
 }
